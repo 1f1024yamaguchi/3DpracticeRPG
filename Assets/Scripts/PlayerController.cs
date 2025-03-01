@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 3; //移動速度
     [SerializeField] private float jumpPower = 3; //ジャンプ力
+    [SerializeField] private Transform cameraTransform; //カメラのTransform
+    [SerializeField] private float rotationSpeed = 1f; //回転速度
     private CharacterController _characterController; 
     private Transform _transform; 
     private Vector3 _moveVelocity;
@@ -35,11 +37,29 @@ public class PlayerController : MonoBehaviour
 
         //moveアクションを使った移動処理（完成を無視しているのでキビキビ動く）
         var moveValue = _move.ReadValue<Vector2>();
-        _moveVelocity.x = moveValue.x * moveSpeed;
-        _moveVelocity.z = moveValue.y * moveSpeed;
+        //カメラの向きを考慮して移動方向を決定
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
 
-        //移動方向に向く
-        _transform.LookAt(_transform.position + new Vector3(_moveVelocity.x, 0 , _moveVelocity.z));
+        //上方向への影響を除外(x,y平面のみで計算)
+        forward.y =0;
+        right.y = 0;
+        forward.Normalize();
+        right.Normalize();
+
+        //入力値をカメラの向きに合わせた移動ベクトルに変換
+        Vector3 moveDirection = (forward * moveValue.y + right * moveValue.x).normalized;
+        _moveVelocity.x = moveDirection.x * moveSpeed;
+        _moveVelocity.z = moveDirection.z * moveSpeed;
+
+
+ 
+        //キャラクターの向きを移動方向に向ける
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            _transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.deltaTime  * rotationSpeed);
+        }
 
         if (_characterController.isGrounded)
         {
