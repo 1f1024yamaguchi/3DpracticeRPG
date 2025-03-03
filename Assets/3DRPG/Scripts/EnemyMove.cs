@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyMove : MonoBehaviour
 {
-    private RaycastHit[] _raycastHit = new RaycastHit[10];
+    private RaycastHit[] _raycastHits = new RaycastHit[10];
     
     private NavMeshAgent _agent;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
