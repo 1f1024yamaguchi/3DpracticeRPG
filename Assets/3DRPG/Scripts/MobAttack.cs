@@ -14,11 +14,20 @@ public class MobAttack : MonoBehaviour
     private void Start()
     {
         _status = GetComponent<MobStatus>();
+        if (_status == null)
+        {
+            Debug.LogError("MobStatusコンポーネントがアタッチされていません！", this);
+        }
     }
 
     //攻撃可能な状態であれば攻撃を行う
     public void AttackIfPossible()
     {
+        if (_status == null)
+        {
+            Debug.LogError("MobStatus が null です！ MobStatus が正しくアタッチされているか確認してください。", this);
+            return;
+        }
         if (!_status.IsAttackable) return;
         //ステータスと衝突したオブジェクトで攻撃可否を判断する
 
