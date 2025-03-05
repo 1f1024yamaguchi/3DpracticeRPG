@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerStatus))]
+[RequireComponent(typeof(MobAttack))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 3; //移動速度
@@ -13,14 +15,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
     private CharacterController _characterController; 
     private Transform _transform; 
-    private Vector3 _moveVelocity;
+    private Vector3 _moveVelocity; //キャラの移動速度情報
     private InputAction _move;
     private InputAction _jump;
+    private InputAction _attack;
+    private PlayerStatus _status;
+    private MobAttack _mobAttack;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
         _transform = transform;
+        _status = GetComponent<PlayerStatus>();
+        _mobAttack = GetComponent<MobAttack>();
         animator = GetComponent<Animator>();
 
         var input = GetComponent<PlayerInput>();
@@ -28,6 +35,7 @@ public class PlayerController : MonoBehaviour
         //アクションマップからアクションを取得するにはFindAction()を使う
         _move = input.currentActionMap.FindAction("Move");
         _jump = input.currentActionMap.FindAction("Jump");
+        _attack = input.currentActionMap.FindAction("Attack");
 
     }
 
@@ -37,31 +45,47 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log(_characterController.isGrounded ? "地面にいます" : "空中です");
 
-        //moveアクションを使った移動処理（完成を無視しているのでキビキビ動く）
-        var moveValue = _move.ReadValue<Vector2>();
-        //カメラの向きを考慮して移動方向を決定
-        Vector3 forward = cameraTransform.forward;
-        Vector3 right = cameraTransform.right;
+        if (_attack.WasPressedThisFrame())
+        {
+            //Attackアクション(マウス左クリックなどで)攻撃をする
+            _mobAttack.AttackIfPossible();
+        }
 
-        //上方向への影響を除外(x,y平面のみで計算)
-        forward.y =0;
-        right.y = 0;
-        forward.Normalize();
-        right.Normalize();
+        if (_status.IsMovable) //移動可能な状態であればユーザー入力を移動に反映する
+        {
+            var moveValue = _move.ReadValue<Vector2>(); // 移動の入力値を取得
+            Vector3 forward = cameraTransform.forward;  // カメラの前方向
+            Vector3 right = cameraTransform.right;      // カメラの右方向
+            
+            //上方向への影響を除外(x,y平面のみで計算)
+            forward.y =0;
+            right.y = 0;
+            forward.Normalize();
+            right.Normalize();
 
-        //入力値をカメラの向きに合わせた移動ベクトルに変換
-        Vector3 moveDirection = (forward * moveValue.y + right * moveValue.x).normalized;
-        _moveVelocity.x = moveDirection.x * moveSpeed;
-        _moveVelocity.z = moveDirection.z * moveSpeed;
+            //入力値をカメラの向きに合わせた移動ベクトルに変換
+            Vector3 moveDirection = (forward * moveValue.y + right * moveValue.x).normalized;
+            _moveVelocity.x = moveDirection.x * moveSpeed;
+            _moveVelocity.z = moveDirection.z * moveSpeed;
 
 
  
-        //キャラクターの向きを移動方向に向ける
-        if (moveDirection != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            _transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.deltaTime  * rotationSpeed);
+            //キャラクターの向きを移動方向に向ける
+            if (moveDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+             _transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.deltaTime  * rotationSpeed);
+            }
+            else
+            {
+                _moveVelocity.x =0;
+                _moveVelocity.z =0;
+            }
         }
+
+        
+
+        
 
         if (_characterController.isGrounded)
         {
