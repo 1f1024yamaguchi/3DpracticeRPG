@@ -6,7 +6,8 @@ public class MobStatus : MonoBehaviour
     {
         Normal,//通常
         Attack,//攻撃中
-        Die //死亡
+        Die, //死亡
+        Guard //ガード中 
     }
 
     //移動可能かどうか
@@ -20,6 +21,8 @@ public class MobStatus : MonoBehaviour
 
     //ライフの値を返す
     public float Life => _life;
+
+    public bool IsGuarding => _state ==StateEnum.Guard;
 
     [SerializeField] private float lifeMax =10; //ライフ最大値
     protected Animator _animator;
@@ -43,11 +46,18 @@ public class MobStatus : MonoBehaviour
     {
         if (_state == StateEnum.Die) return;
 
+        if (IsGuarding)
+        {
+            Debug.Log("ガード成功");
+            return; //ガード中ならダメージを受けない
+        }
+
         _life -= damage;
         if (_life > 0) return;
 
         _state = StateEnum.Die;
         _animator.SetTrigger("Die");
+
         OnDie();
     }
 
@@ -65,6 +75,18 @@ public class MobStatus : MonoBehaviour
     {
         if (_state == StateEnum.Die) return;
         _state = StateEnum.Normal;
+
+        
+    }
+
+    public void GoToGuardStateIfPossible()
+    {
+        if (_state ==StateEnum.Die) 
+        {
+            return;//死亡中ならガードできない
+        }
+        _state = StateEnum.Guard;
+        _animator.SetTrigger("Guard"); //ガードアニメーション再生
     }
 
 

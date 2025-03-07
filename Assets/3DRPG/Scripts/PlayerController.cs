@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private InputAction _move;
     private InputAction _jump;
     private InputAction _attack;
+    private InputAction _guard;
     private PlayerStatus _status;
     private MobAttack _mobAttack;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -36,6 +37,12 @@ public class PlayerController : MonoBehaviour
         _move = input.currentActionMap.FindAction("Move");
         _jump = input.currentActionMap.FindAction("Jump");
         _attack = input.currentActionMap.FindAction("Attack");
+        _guard = input.currentActionMap.FindAction("Guard");
+
+        if (_guard == null)
+        {
+            Debug.LogError("Guard アクションが見つかりません。InputActionMap を確認してください。");
+        }
 
     }
 
@@ -43,6 +50,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (_guard.IsPressed())
+        {
+            _status.GoToGuardStateIfPossible();
+        }
+        else
+        {
+            _status.GoToNormalStateIfPossible();
+        }
+
         Debug.Log(_characterController.isGrounded ? "地面にいます" : "空中です");
 
         if (_attack.WasPressedThisFrame())
