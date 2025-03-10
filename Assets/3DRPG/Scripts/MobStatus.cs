@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 
 public class MobStatus : MonoBehaviour
 {
@@ -45,6 +46,7 @@ public class MobStatus : MonoBehaviour
     public void Damage(int damage)
     {
         if (_state == StateEnum.Die) return;
+        Debug.Log($"現在のステート: {_state}, IsGuarding: {IsGuarding}");
 
         if (IsGuarding)
         {
@@ -73,8 +75,15 @@ public class MobStatus : MonoBehaviour
     //可能であればNormalの状態に移行する
     public void GoToNormalStateIfPossible()
     {
-        if (_state == StateEnum.Die) return;
+        if (_state == StateEnum.Die  ) return;
         _state = StateEnum.Normal;
+
+        //MobはIsGuardingを持たないので設定しないようにする。
+
+        if (_animator.parameters.Any(p => p.name =="IsGuarding"))
+        {
+            _animator.SetBool("IsGuarding" , false); 
+        }
 
         
     }
@@ -86,7 +95,9 @@ public class MobStatus : MonoBehaviour
             return;//死亡中ならガードできない
         }
         _state = StateEnum.Guard;
-        _animator.SetTrigger("Guard"); //ガードアニメーション再生
+        //_animator.SetTrigger("Guard"); //ガードアニメーション再生
+        _animator.SetBool("IsGuarding", true);
+        Debug.Log("ガード状態になった！ 現在のステート: " + _state);
     }
 
 

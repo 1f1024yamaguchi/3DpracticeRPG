@@ -50,15 +50,25 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool isGuarding = _guard.IsPressed();
+        Debug.Log("IsGuarding: " + isGuarding);
 
-        if (_guard.IsPressed())
+        if (isGuarding)
         {
             _status.GoToGuardStateIfPossible();
+        }
+
+        if (!isGuarding)
+        {
+            animator.SetBool("IsGuarding" , false);
         }
         else
         {
             _status.GoToNormalStateIfPossible();
+            
         }
+
+        animator.SetBool("IsGuarding", isGuarding); //Animatorに反映
 
         Debug.Log(_characterController.isGrounded ? "地面にいます" : "空中です");
 
@@ -66,9 +76,11 @@ public class PlayerController : MonoBehaviour
         {
             //Attackアクション(マウス左クリックなどで)攻撃をする
             _mobAttack.AttackIfPossible();
+            _moveVelocity.x =0f;
+            _moveVelocity.z = 0f;
         }
 
-        if (_status.IsMovable) //移動可能な状態であればユーザー入力を移動に反映する
+        if (_status.IsMovable && !isGuarding) //移動可能な状態であればユーザー入力を移動に反映する、ガード注出ない場合のみ移動
         {
             var moveValue = _move.ReadValue<Vector2>(); // 移動の入力値を取得
             Vector3 forward = cameraTransform.forward;  // カメラの前方向
@@ -93,12 +105,19 @@ public class PlayerController : MonoBehaviour
                 Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
              _transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.deltaTime  * rotationSpeed);
             }
-            else
-            {
-                _moveVelocity.x =0;
-                _moveVelocity.z =0;
-            }
         }
+        else if (isGuarding) //ガード中のときは移動速度を0.01に固定（アニメーションをIdelにしない)
+        
+        {
+            _moveVelocity.x = 0f;
+            _moveVelocity.z = 0f;
+        }
+            //else
+            //{
+                //_moveVelocity.x =0;
+                //_moveVelocity.z =0;
+            //}
+        
 
         
 
@@ -106,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
         if (_characterController.isGrounded)
         {
-            if (_jump.WasPressedThisFrame())
+            if (_jump.WasPressedThisFrame() && !isGuarding) //ガード中はジャンプできない
             {
                 //ジャンプ処理
                 Debug.Log("ジャンプ!");
@@ -128,8 +147,9 @@ public class PlayerController : MonoBehaviour
         //オブジェクトを動かす
         _characterController.Move(_moveVelocity * Time.deltaTime);
 
-        //移動スピードをanimatorに反映する
-        animator.SetFloat("MoveSpeed", new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude);
+        //移動スピードをanimatorに反映する(ガード中は0.01にする)
+        
+        //animator.SetFloat("MoveSpeed", new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude);
         float moveSpeedValue = new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude;
         Debug.Log("MoveSpeed: " + moveSpeedValue);
         animator.SetFloat("MoveSpeed", moveSpeedValue);
