@@ -51,9 +51,17 @@ public class MobAttack : MonoBehaviour
     public void OnHitAttack(Collider collider)
     {
         var targetMob = collider.GetComponent<MobStatus>();
-        if (null == targetMob) return;
+        if (targetMob == null) return;
 
         //プレイヤーにダメージを与える
+
+        if (targetMob ==null) return;
+
+        if(targetMob.IsGuarding)
+        {
+            Debug.Log("攻撃をガードされた。ダメージ0");
+            return; //ガード中ならダメージを与えない
+        }
         targetMob.Damage(1);
     }
     

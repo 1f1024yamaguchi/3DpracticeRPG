@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private InputAction _guard;
     private PlayerStatus _status;
     private MobAttack _mobAttack;
+    private MobStatus mobStatus;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
         _jump = input.currentActionMap.FindAction("Jump");
         _attack = input.currentActionMap.FindAction("Attack");
         _guard = input.currentActionMap.FindAction("Guard");
+        mobStatus = GetComponent<MobStatus>(); // MobStatusの参照を取得
 
         if (_guard == null)
         {
@@ -50,6 +52,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        
         bool isGuarding = _guard.IsPressed();
         Debug.Log("IsGuarding: " + isGuarding);
 
@@ -58,13 +62,14 @@ public class PlayerController : MonoBehaviour
             _status.GoToGuardStateIfPossible();
         }
 
-        if (!isGuarding)
-        {
-            animator.SetBool("IsGuarding" , false);
-        }
+        // if (!isGuarding)
+        // {
+        //     animator.SetBool("IsGuarding" , false);
+        // }
         else
         {
             _status.GoToNormalStateIfPossible();
+            animator.SetBool("IsGuarding" , false); //追加
             
         }
 
@@ -153,5 +158,15 @@ public class PlayerController : MonoBehaviour
         float moveSpeedValue = new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude;
         Debug.Log("MoveSpeed: " + moveSpeedValue);
         animator.SetFloat("MoveSpeed", moveSpeedValue);
+
+        // if (Input.GetKeyDown(KeyCode.LeftShift)) 
+        // {
+        //     mobStatus.GoToGuardStateIfPossible(); // ガード開始
+        // }
+        
+        // if (Input.GetKeyUp(KeyCode.LeftShift)) 
+        // {
+        //     mobStatus.CancelGuard(); // ガード解除
+        // }
     }
 }

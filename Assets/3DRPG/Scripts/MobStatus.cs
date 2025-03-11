@@ -51,10 +51,12 @@ public class MobStatus : MonoBehaviour
         if (IsGuarding)
         {
             Debug.Log("ガード成功");
+            damage =0; //攻撃を完全に無効化
             return; //ガード中ならダメージを受けない
         }
 
         _life -= damage;
+        Debug.Log($"ダメージを受けた: {damage}, 残りライフ: {_life}");
         if (_life > 0) return;
 
         _state = StateEnum.Die;
@@ -77,15 +79,25 @@ public class MobStatus : MonoBehaviour
     {
         if (_state == StateEnum.Die  ) return;
         _state = StateEnum.Normal;
+        Debug.Log("Normal状態に移行しました。現在のステート: " + _state);
 
         //MobはIsGuardingを持たないので設定しないようにする。
 
         if (_animator.parameters.Any(p => p.name =="IsGuarding"))
         {
             _animator.SetBool("IsGuarding" , false); 
+            Debug.Log("ガード解除！現在のステート: " + _state);
         }
 
         
+    }
+
+    public void CancelGuard()
+    {
+        if (_state == StateEnum.Guard)
+        {
+            GoToNormalStateIfPossible();
+        }
     }
 
     public void GoToGuardStateIfPossible()
@@ -99,6 +111,8 @@ public class MobStatus : MonoBehaviour
         _animator.SetBool("IsGuarding", true);
         Debug.Log("ガード状態になった！ 現在のステート: " + _state);
     }
+
+
 
 
 
