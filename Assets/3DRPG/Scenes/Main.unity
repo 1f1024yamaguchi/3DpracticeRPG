@@ -5756,7 +5756,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10003485b5d85434088b84dc1bb21067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climbSpeed: 3
+  wallCheckOffset: 1
+  upperWallCheckOffset: 2
+  wallCheckDistance: 1
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
