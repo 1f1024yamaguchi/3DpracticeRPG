@@ -1,133 +1,88 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class WallClimb : MonoBehaviour
 {
-    public float wallCheckOffset =1.0f;
-    public float upperWallCheckOffset = 2.0f;
-    public float wallCheckDistance = 1.0f;
+    [Header("壁検出設定")]
+    public float wallCheckOffset = 1.0f;
+    public float upperCheckOffset = 2.0f;
+    public float checkDistance = 1.0f;
+    [Header("よじ登り後の移動量")]
+    public float climbForwardDistance = 2.0f;
+    public float climbUpwardDistance = 2.5f;
+    public float climbDuration = 0.5f; // 何秒でよじ登るか
 
-    private bool isForwardWall;
-    private bool isUpperWall;
-    private bool isGrab;
-    private bool isClimb;
-    
+    //Animator anim;
+    CharacterController controller;
 
-    private Vector3 climbOldPos;
-    private Vector3 climbPos;
+    //内部ステート
+    //bool isGrabbed;
+    bool isClimbing = false;
+    Vector3 climbStartPos;
+   
+    Vector3 climbEndPos;
+    float climbTimer = 0f;
 
-    private Animator anim;
-    private CharacterController controller;
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        anim = GetComponent<Animator>();
+        //anim = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
-    }
+    } 
 
-    // Update is called once per frame
-    void Update()
+    //壁の前方・上部の有無チェック
+    void CheckWalls(out bool wallInFront, out bool wallAbove)
     {
-        Ray wallCheckRay = new Ray(transform.position + Vector3.up * wallCheckOffset, transform.forward);
-        Ray upperCheckRay = new Ray(transform.position + Vector3.up * upperWallCheckOffset, transform.forward);
+        Vector3 pos = transform.position;
+        wallInFront = Physics.Raycast(pos + Vector3.up * wallCheckOffset, transform.forward, checkDistance);
+        wallAbove = Physics.Raycast(pos + Vector3.up * upperCheckOffset, transform.forward, checkDistance);
 
-        Vector3 wallCheckStart = transform.position + Vector3.up * wallCheckOffset;
-        Vector3 upperCheckStart = transform.position + Vector3.up * upperWallCheckOffset;
-
-        //Rayの方向（前方）
-        Vector3 direction = transform.forward; 
-
-        RaycastHit hit;
-        if (Physics.Raycast(wallCheckRay, out hit, wallCheckDistance))
-        {
-            if(hit.collider.CompareTag("Climbable")) // タグが "Climbable" なら登れる壁と判定
-            {
-                isForwardWall = true;
-            }
-            else
-            {
-                isForwardWall = false;
-            }
-        
-        }
-        else
-        {
-            isForwardWall = false;
-        }
-
-        if (Physics.Raycast(upperCheckRay, out hit, wallCheckDistance))
-        {
-            if (hit.collider.CompareTag("Climbable"))
-            {
-                isUpperWall = true;
-            }
-            else
-            {
-                isUpperWall = false;
-            }
-        }
-        else
-        {
-            isUpperWall = false;
-        }
-
-        isForwardWall = Physics.Raycast(wallCheckRay, wallCheckDistance);
-        isUpperWall = Physics.Raycast(upperCheckRay, wallCheckDistance);
-
-        Debug.DrawRay(wallCheckStart, direction * wallCheckDistance, Color.red);
-        Debug.DrawRay(upperCheckStart, direction * wallCheckDistance, Color.blue);
-
-        //崖つかまり処理
-        if (isForwardWall && !isUpperWall && Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
-        {
-            isGrab = true;
-            anim.SetTrigger("ClimbGrab"); //掴みアニメーション開始
-        }
-
-        //壁つかまり中の処理
-        if (isGrab && !isForwardWall)
-        {
-            controller.enabled = false; //移動を無効化
-            if (Input.GetKey(KeyCode.W))//前進入力でよじ登り開始
-            {
-                climbOldPos = transform.position;
-                climbPos = transform.position + transform.forward * 2.0f + Vector3.up * 2.5f;
-                isGrab = false;
-                isClimb = true;
-                anim.SetTrigger("ClimbUp");
-            }
-        }
-
-        //よじ登り処理
-        if (isClimb)
-        {
-            
-            
-            float f = anim.GetFloat("ClimbProgress"); //アニメーションの進行度
-            Debug.Log("ClimbProgress: " + f); // デバッグログの追加
-            float x = Mathf.Lerp(climbOldPos.x , climbPos.x , Ease(f));
-            float z = Mathf.Lerp(climbOldPos.z, climbPos.z, Ease(f));
-            float y = Mathf.Lerp(climbOldPos.y, climbPos.y, f);
-
-            transform.position = new Vector3(x,y,z);
-
-            if (f >= 0.8f)
-            {
-                FinishClimb(); //よじ登り終了
-            }
-            
-        }
+        Debug.DrawRay(pos + Vector3.up * wallCheckOffset, transform.forward * checkDistance, Color.red);
+        Debug.DrawRay(pos + Vector3.up * upperCheckOffset, transform.forward * checkDistance, Color.blue);
     }
 
-    float Ease(float x)
+    //つかめるか判定（地面にいて、前方に壁、かつ上部に余裕あり）
+
+    public bool CanGrab()
     {
-        return x * x * x;
+        if(!controller.isGrounded) return false;
+        CheckWalls(out bool fwd, out bool up);
+        return fwd && !up;
     }
 
-    public void FinishClimb()
+    //掴み開始
+    public void StartClimb()
     {
-        isClimb = false;
-        controller.enabled = true; //移動を開始
+        isClimbing = true;
+        climbStartPos = transform.position;
+        climbEndPos = climbStartPos + transform.forward * climbForwardDistance + Vector3.up * climbUpwardDistance;
+        climbTimer = 0f;
     }
+
+    //前入力でよじ登り開始を試みる
+    //moveInput.y > 0.1fなどで前入力を検出
+
+    public void HandleClimb()
+    {
+        if (!isClimbing) return;
+
+        climbTimer += Time.deltaTime;
+        float t = Mathf.Clamp01(climbTimer / climbDuration);
+        transform.position = Vector3.Lerp(climbStartPos, climbEndPos, t);
+    }
+
+    public void HandClimb()
+    {
+        if (!isClimbing) return;
+
+        climbTimer += Time.deltaTime;
+        float t = Mathf.Clamp01(climbTimer / clumbDuration);
+        transform.position = Vector3.Lerp(climbStartPos, climbEndPos, t);
+
+        if (t >= 1f)
+        {
+            isClimbing = false;
+        }
+    }
+
+    public bool IsClimbing => isClimbing;
 }
