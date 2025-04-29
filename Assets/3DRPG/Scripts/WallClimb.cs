@@ -19,7 +19,6 @@ public class WallClimb : MonoBehaviour
     //bool isGrabbed;
     bool isClimbing = false;
     Vector3 climbStartPos;
-   
     Vector3 climbEndPos;
     float climbTimer = 0f;
 
@@ -53,29 +52,24 @@ public class WallClimb : MonoBehaviour
     public void StartClimb()
     {
         isClimbing = true;
+        climbTimer = 0f;
         climbStartPos = transform.position;
         climbEndPos = climbStartPos + transform.forward * climbForwardDistance + Vector3.up * climbUpwardDistance;
-        climbTimer = 0f;
+        
+        // 移動を止める
+        controller.enabled = false;
     }
 
     //前入力でよじ登り開始を試みる
     //moveInput.y > 0.1fなどで前入力を検出
 
-    public void HandleClimb()
-    {
-        if (!isClimbing) return;
-
-        climbTimer += Time.deltaTime;
-        float t = Mathf.Clamp01(climbTimer / climbDuration);
-        transform.position = Vector3.Lerp(climbStartPos, climbEndPos, t);
-    }
 
     public void HandClimb()
     {
         if (!isClimbing) return;
 
         climbTimer += Time.deltaTime;
-        float t = Mathf.Clamp01(climbTimer / clumbDuration);
+        float t = Mathf.Clamp01(climbTimer / climbDuration);
         transform.position = Vector3.Lerp(climbStartPos, climbEndPos, t);
 
         if (t >= 1f)
