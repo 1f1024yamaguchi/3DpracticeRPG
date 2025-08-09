@@ -6,7 +6,7 @@ using System.Collections;
 
 public class MobAttack : MonoBehaviour
 {
-    [SerializeField] private float attackCooldown = 0.5f; //攻撃後のクールダウン（秒）
+    [SerializeField] private float attackCooldown = 1.0f; //攻撃後のクールダウン（秒）
     [SerializeField] private Collider attackCollider;
     [SerializeField] private float attackKnockbackPower = 1.5f; //この攻撃のノックバック倍率
 
