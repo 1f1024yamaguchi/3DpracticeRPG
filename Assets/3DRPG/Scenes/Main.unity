@@ -5681,6 +5681,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b8771055-17ae-48f4-8284-a80b1f6ca05a
     m_ActionName: 'Player/Guard[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6409d291-676f-4bdb-bb32-5fb9e202b88e
+    m_ActionName: Player/Run
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -5703,6 +5707,8 @@ MonoBehaviour:
   cameraTransform: {fileID: 330585546}
   rotationSpeed: 5
   animator: {fileID: 311059547}
+  runSpeed: 6
+  _knockbackDrag: 5
 --- !u!143 &311059544
 CharacterController:
   m_ObjectHideFlags: 0
@@ -5796,6 +5802,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 0.5
   attackCollider: {fileID: 1954320225}
+  attackKnockbackPower: 1.5
 --- !u!114 &311059549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5809,6 +5816,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeMax: 50
+  knockbackResistance: 1
+  attackPower: 5
 --- !u!114 &311059550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6830,6 +6839,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6012286912827264864, guid: 6aed7d5a7a495f94d8d55a61815701c6, type: 3}
   m_PrefabInstance: {fileID: 311059538}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1019437732
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1019437735}
+  - component: {fileID: 1019437734}
+  - component: {fileID: 1019437733}
+  m_Layer: 0
+  m_Name: Goal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1019437733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019437732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d778b97d042784e8261b91c8610ffa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1019437734
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019437732}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1019437735
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019437732}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -61.201897, y: 0.37, z: -351.3817}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1036245918
 GameObject:
   m_ObjectHideFlags: 0
@@ -12236,9 +12311,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2728522748408393533, guid: ce6ca9ada077e834ea0dd8adcfd69588, type: 3}
+      propertyPath: attackKnockbackPower
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7479121331106471373, guid: ce6ca9ada077e834ea0dd8adcfd69588, type: 3}
       propertyPath: m_Name
       value: Slime_Green (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8744146294250064233, guid: ce6ca9ada077e834ea0dd8adcfd69588, type: 3}
+      propertyPath: attackPower
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12513,3 +12596,4 @@ SceneRoots:
   - {fileID: 1633385349}
   - {fileID: 331777418}
   - {fileID: 62262213}
+  - {fileID: 1019437735}
