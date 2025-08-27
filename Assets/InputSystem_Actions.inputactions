@@ -7,9 +7,9 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "351f2ccd-1f9f-44bf-9bec-d62ac5c5f408",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -99,6 +99,15 @@
                     "name": "Run",
                     "type": "Button",
                     "id": "6409d291-676f-4bdb-bb32-5fb9e202b88e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Magic",
+                    "type": "Button",
+                    "id": "55b5c26a-b9f0-4c20-b83c-ddc802542b3c",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -499,6 +508,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3d5caf27-61cb-418b-8c36-f96d1907a8eb",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Magic",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
