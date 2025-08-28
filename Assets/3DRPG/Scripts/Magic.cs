@@ -48,8 +48,12 @@ public class Magic : MonoBehaviour
         }
 
         //画面中央からレイを飛ばす
+        
         Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f,0));
         Vector3 targetPoint;
+
+        float rayDistance = 100f;
+        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 2f);
 
         //レイが何かに当たったらそこが目標地点
         if(Physics.Raycast(ray, out RaycastHit hit))
@@ -65,7 +69,7 @@ public class Magic : MonoBehaviour
         Vector3 direction = (targetPoint - firePoint.position).normalized;
 
         //計算した方向に向けて魔法のプレハブ生成
-        Quaternion rotation = Quaternion.LookRotation(direction);
+        Quaternion rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180f, 0);
         Instantiate(magicPrefab, firePoint.position, rotation);
     }
 }
