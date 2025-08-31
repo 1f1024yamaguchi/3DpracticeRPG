@@ -30,7 +30,7 @@ public class MobStatus : MonoBehaviour
 
     [SerializeField] private float lifeMax =10; //ライフ最大値
     [SerializeField] protected float knockbackResistance = 1f; // この値が高いほど吹っ飛ばされにくい
-    [SerializeField] private int attackPower = 2; //キャラクターの基本攻撃力
+    [SerializeField] protected int attackPower = 2; //キャラクターの基本攻撃力
 
     
     public int AttackPower => attackPower; //外部から攻撃力を読み取るための窓口
@@ -38,6 +38,7 @@ public class MobStatus : MonoBehaviour
     protected Animator _animator;
     protected StateEnum _state = StateEnum.Normal; //Mob状態
     private float _life; //現在のライフ値(ヒットポイント)
+    
     
 
 

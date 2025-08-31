@@ -77,7 +77,7 @@ public class MobAttack : MonoBehaviour
             // (基本攻撃力 × この技のノックバック倍率)
             float finalKnockbackPower = attackerPower * attackKnockbackPower;
 
-            Debug.Log("★★★ Step 2: 吹っ飛ばし威力計算！ attackerPower=" + attackerPower + ", finalKnockbackPower=" + finalKnockbackPower);
+            Debug.Log(" 吹っ飛ばし威力計算 attackerPower=" + attackerPower + ", finalKnockbackPower=" + finalKnockbackPower);
 
             //ダメージと吹っ飛ぶ威力を相手に伝える
             playerStatus.Damage(attackerPower, attackDirection, finalKnockbackPower);
@@ -87,7 +87,9 @@ public class MobAttack : MonoBehaviour
         {
             var targetMob = collider.GetComponent<MobStatus>();
             if (targetMob == null) return;
-            targetMob.Damage(1);
+
+            int attackerPower = _status.AttackPower;
+            targetMob.Damage(attackerPower);
         }
 
 

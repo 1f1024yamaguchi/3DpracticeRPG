@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(MobAttack))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 3; //通常の移動速度
+    [SerializeField] public float moveSpeed = 3; //通常の移動速度
     [SerializeField] private float jumpPower = 3; //ジャンプ力
     [SerializeField] private Transform cameraTransform; //カメラのTransform
     [SerializeField] private float rotationSpeed = 1f; //回転速度
@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
             //徐々に速度を減速させる
             _knockbackVector = Vector3.Lerp(_knockbackVector, Vector3.zero, _knockbackDrag * Time.deltaTime);
 
-            Debug.Log("ノックバック中。現在のベクトル強度: " + _knockbackVector.magnitude);
+            
 
             //重力を適用
             _knockbackVector.y  += Physics.gravity.y * Time.deltaTime;

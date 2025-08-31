@@ -851,7 +851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeMax: 2
   knockbackResistance: 1
-  attackPower: 5
+  attackPower: 2
 --- !u!114 &2728522748408393533
 MonoBehaviour:
   m_ObjectHideFlags: 0
