@@ -6,6 +6,7 @@ public class PlayerEffectManager : MonoBehaviour
     private PlayerController _playerController;
     private MobStatus _mobStatus;
     private float baseSpeed;
+    private float baseJump;
     private PlayerStatus _playerStatus;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,6 +14,7 @@ public class PlayerEffectManager : MonoBehaviour
         _playerController = GetComponent<PlayerController>();
         _mobStatus = GetComponent<MobStatus>();
         baseSpeed = _playerController.moveSpeed;
+        baseJump = _playerController.jumpPower;
         _playerStatus = GetComponent<PlayerStatus>(); //playerStatusを直接取得
         
         
@@ -23,7 +25,7 @@ public class PlayerEffectManager : MonoBehaviour
         switch (itemType)
         {
             case Item.ItemType.SpeedUp:
-            //10秒間、移動速度を1.5倍にするコルーチンを開始
+            //10秒間、移動速度とジャンプ力を1.5倍にするコルーチンを開始
                 StartCoroutine(SpeedUpCoroutine(10f,1.5f));
                 break;
             
@@ -47,6 +49,7 @@ public class PlayerEffectManager : MonoBehaviour
 
         //速度を上げる
         _playerController.moveSpeed =baseSpeed* multipliter;
+        _playerController.jumpPower =baseJump* multipliter;
         Debug.Log("現在の速度" + _playerController.moveSpeed);
 
         //指定された時間待つ
@@ -54,6 +57,7 @@ public class PlayerEffectManager : MonoBehaviour
 
         //速度を元に戻す
         _playerController.moveSpeed = baseSpeed;
+        _playerController.jumpPower = baseJump;
         Debug.Log("スピードアップ効果終了。");
 
     }

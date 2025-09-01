@@ -38,7 +38,7 @@ public class Spown_enemy : MonoBehaviour
             }
 
             //１０秒待つ
-            yield return new WaitForSeconds(10);
+            yield return new WaitForSeconds(15);
 
             if(playerStatus.Life <= 0)
             {

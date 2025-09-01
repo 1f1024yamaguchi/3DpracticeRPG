@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] public float moveSpeed = 3; //通常の移動速度
-    [SerializeField] private float jumpPower = 3; //ジャンプ力
+    [SerializeField] public float jumpPower = 3; //ジャンプ力
     [SerializeField] private Transform cameraTransform; //カメラのTransform
     [SerializeField] private float rotationSpeed = 1f; //回転速度
     [SerializeField] private Animator animator;

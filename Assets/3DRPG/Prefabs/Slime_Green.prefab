@@ -849,7 +849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65366a9221fadaf499834766aa17bf8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeMax: 2
+  lifeMax: 10
   knockbackResistance: 1
   attackPower: 2
 --- !u!114 &2728522748408393533
@@ -879,7 +879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8518b80d6196c7e4b9fa95a263f323a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropRate: 0.5
+  dropRate: 0.1
   itemPrefab: {fileID: 6825542685141276743, guid: af59d8edf177c4645a8e94ac393f38ec, type: 3}
   number: 1
 --- !u!114 &-6950016533249621424
@@ -894,7 +894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8518b80d6196c7e4b9fa95a263f323a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropRate: 0.1
+  dropRate: 0.01
   itemPrefab: {fileID: 74854161694058522, guid: e6bfcd3b67085894481a16b57f193c2d, type: 3}
   number: 1
 --- !u!1 &7489504495843317739
