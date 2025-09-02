@@ -911,6 +911,7 @@ GameObject:
   - component: {fileID: 7085080106007940662}
   - component: {fileID: 5386949420767810153}
   - component: {fileID: 1108170871176120237}
+  - component: {fileID: 1482308673572110026}
   m_Layer: 9
   m_Name: SKELETON
   m_TagString: Untagged
@@ -1080,6 +1081,19 @@ MonoBehaviour:
   dropRate: 0.05
   itemPrefab: {fileID: 456069230174148744, guid: 10fb3996930739f49a9b1068171d6f57, type: 3}
   number: 1
+--- !u!114 &1482308673572110026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3512296260308043401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0c7f114cc247b542b65c9f5ca19e8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyDistance: 30
 --- !u!1 &3583604058283882365
 GameObject:
   m_ObjectHideFlags: 0
