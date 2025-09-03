@@ -18,6 +18,12 @@ public class EnemyMove : MonoBehaviour
         _status = GetComponent<EnemyStatus>();
     }
 
+    void Awake()
+    {
+        _agent = GetComponent<NavMeshAgent>();
+        _status = GetComponent<EnemyStatus>();
+    }
+
     // CollisionDetectorのontriggerstayにセットし、衝突判定を受け取るメソッド
     public void OnDetectObject(Collider collider)
     {

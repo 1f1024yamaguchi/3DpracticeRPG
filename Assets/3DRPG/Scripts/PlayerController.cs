@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform; //カメラのTransform
     [SerializeField] private float rotationSpeed = 1f; //回転速度
     [SerializeField] private Animator animator;
-    [SerializeField] private  float runSpeed = 6; //ダッシュ時の移動速度
+    [SerializeField] public  float runSpeed = 6; //ダッシュ時の移動速度
     [SerializeField] private float _knockbackDrag = 4f; //吹っ飛ばしの勢いを減速させる抵抗値
 
 
