@@ -38,8 +38,11 @@ public class EnemyMove : MonoBehaviour
             var positionDiff = collider.transform.position - transform.position; //自信とプレイヤーの座標差分を計算する
             var distance = positionDiff.magnitude; //プレイヤーとの距離を計算する
             var direction = positionDiff.normalized; //プレイヤーへの方向
+
+            //敵の目線の高さからRayを飛ばす（今回は1.5m）
+            Vector3 eyePos = transform.position + Vector3.up * 1.5f;
             //_raycastHitsに、ヒットしたColliderや座標情報などが格納される。RaycastAllとRaycastNonAllocは同等の機能だが、RaycastNonAllocだとメモリにゴミが残らないのでこちらを推奨
-            var hitCount = Physics.RaycastNonAlloc(transform.position, direction, _raycastHits, distance, raycastLayermask);
+            var hitCount = Physics.RaycastNonAlloc(eyePos, direction, _raycastHits, distance, raycastLayermask);
             Debug.Log("hitCount: " + hitCount);
             if (hitCount ==0)
             {
