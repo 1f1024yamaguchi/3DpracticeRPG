@@ -28,7 +28,7 @@ public class PlayerEffectManager : MonoBehaviour
         {
             case Item.ItemType.SpeedUp:
             //10秒間、移動速度とジャンプ力を1.5倍にするコルーチンを開始
-                StartCoroutine(SpeedUpCoroutine(10f,1.5f));
+                StartCoroutine(SpeedUpCoroutine(30f,1.5f));
                 break;
             
             case Item.ItemType.Attack_Power:
