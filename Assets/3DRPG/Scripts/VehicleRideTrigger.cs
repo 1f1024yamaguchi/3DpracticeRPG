@@ -2,22 +2,21 @@ using UnityEngine;
 
 public class VehicleRideTrigger : MonoBehaviour
 {
-    private VehiclePath vehiclePath;
+    [SerializeField] private VehiclePath vehicle;
 
-    void Start()
-    {
-        // 同じオブジェクトにある VehiclePath を取得
-        vehiclePath = GetComponent<VehiclePath>();
-    }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            vehiclePath.StartMoving();
+            var passenger = other.GetComponent<VehiclePassenger>();
+            if(passenger != null)
+            {
+                passenger.RideVehicle(vehicle);
+                vehicle.StartMoving(); //乗ったら船が動く
+            }
 
-            // プレイヤーを子にして一緒に動かす
-            other.transform.SetParent(transform);
         }
     }
 
@@ -25,10 +24,12 @@ public class VehicleRideTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            vehiclePath.StopMoving();
-
-            // 子から外して降りる
-            other.transform.SetParent(null);
+            var passenger = other.GetComponent<VehiclePassenger>();
+            if(passenger != null)
+            {
+                passenger.LeaveVehicle();
+                vehicle.StopMoving(); //降りたら止める
+            }
         }
     }
 }

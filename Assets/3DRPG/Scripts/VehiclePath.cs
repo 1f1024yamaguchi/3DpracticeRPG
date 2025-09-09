@@ -1,22 +1,35 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class VehiclePath : MonoBehaviour
 {
     [SerializeField] private List<Transform> waypoints;
     [SerializeField] private float speed = 5f;
+    [SerializeField] private float returnDelay = 3f;
     private int currentIndex = 0;
     private Vector3 lastPosition;
     public Vector3 DeltaPosition { get; private set; } // ← プレイヤーに伝える用
 
+    private bool isMoving = false;
+    private bool isReturning = false;
+
     void Start()
     {
         lastPosition = transform.position;
+
+        if(waypoints != null && waypoints.Count >0)
+        {
+            transform.position = waypoints[0].position;
+            transform.rotation = waypoints[0].rotation;
+            currentIndex =1; //次の目標はwaypoint１
+        }
     }
 
     void Update()
     {
-        if (!isMoving) return;
+        if(!isMoving) return; //動作onの時だけ動かす
+        
         if (waypoints == null || waypoints.Count == 0) return;
 
         Transform target = waypoints[currentIndex];
@@ -34,14 +47,51 @@ public class VehiclePath : MonoBehaviour
         {
             currentIndex++;
             if (currentIndex >= waypoints.Count)
-                currentIndex = 0; // ループ
+            {
+                StartCoroutine(ReturnToFirstWaypoint());
+            }
+            
         }
 
         //移動量の更新
-        DeltaPosition = transform.position - lastPosition;
+        if (isMoving && !isReturning)
+        {
+            DeltaPosition = transform.position - lastPosition;
+        }
+        else
+        {
+            DeltaPosition = Vector3.zero;
+        }
+        
         lastPosition = transform.position;
     }
 
-    public void StartMoving() => isMoving = true;
-    public void StopMoving() => isMoving = false;
+    private IEnumerator ReturnToFirstWaypoint()
+    {
+        isReturning = true;
+        isMoving = false;
+        yield return new WaitForSeconds(returnDelay);
+
+        transform.position = waypoints[0].position;
+        transform.rotation = waypoints[0].rotation;
+
+        //リセット
+        currentIndex =1;
+        lastPosition = transform.position;
+
+        isReturning = false;
+        isMoving = true; //再び動き出す
+    }
+
+    public void StartMoving()
+    {
+        isMoving = true;
+    }
+
+    public void StopMoving()
+    {
+        isMoving = false;
+    }
+
+   
 }
