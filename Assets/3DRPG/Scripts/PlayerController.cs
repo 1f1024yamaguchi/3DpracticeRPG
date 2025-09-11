@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
     private MobAttack _mobAttack;
     private MobStatus mobStatus;
 
+    public AudioClip sound1;
+    AudioSource audioSource;
+
     
 
     
@@ -56,6 +59,8 @@ public class PlayerController : MonoBehaviour
         _guard = input.currentActionMap.FindAction("Guard");
         _run = input.currentActionMap.FindAction("Run");
         mobStatus = GetComponent<MobStatus>(); // MobStatusの参照を取得
+
+        audioSource = GetComponent<AudioSource>();
 
         if (_run == null)
         {
@@ -132,6 +137,7 @@ public class PlayerController : MonoBehaviour
             _mobAttack.AttackIfPossible();
             _moveVelocity.x =0f;
             _moveVelocity.z = 0f;
+            audioSource.PlayOneShot(sound1);
         }
 
         if (_status.IsMovable && !isGuarding) //移動可能な状態であればユーザー入力を移動に反映する、ガード注出ない場合のみ移動

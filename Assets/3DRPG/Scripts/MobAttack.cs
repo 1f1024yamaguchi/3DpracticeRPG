@@ -56,7 +56,7 @@ public class MobAttack : MonoBehaviour
         //相手がプレイヤーの場合
         if (playerStatus != null)
         {
-            if (playerStatus.IsGuarding)
+            if (playerStatus.IsGuardEffective)
             {
                 Debug.Log("攻撃をガードされた。ダメージ０");
                 return;

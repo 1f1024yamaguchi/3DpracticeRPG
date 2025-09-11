@@ -7,6 +7,9 @@ public class PlayerStatus : MobStatus
     private PlayerController _playerController; //PlayerControllerを保持
     private Coroutine attackBuffCoroutine;
     private int originalAttack;
+
+    public bool IsGuardEffective { get; private set;}
+    //実際にガードが有効かどうかのフラグ
     
 
 
@@ -72,4 +75,16 @@ public class PlayerStatus : MobStatus
         Debug.Log("攻撃力アップ終了" + attackPower);
         attackBuffCoroutine = null;
     }
+
+    public void OnGuardStart()
+    {
+        IsGuardEffective = true;
+    }
+
+    public void OnGuardFinished()
+    {
+        IsGuardEffective = false;
+    }
+
+    
 }
