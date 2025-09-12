@@ -925,6 +925,7 @@ GameObject:
   - component: {fileID: 1108170871176120237}
   - component: {fileID: 1482308673572110026}
   - component: {fileID: 4632574908664974135}
+  - component: {fileID: -600186741591678895}
   m_Layer: 9
   m_Name: SKELETON
   m_TagString: Untagged
@@ -1124,6 +1125,21 @@ MonoBehaviour:
     m_Bits: 0
   wanderRadius: 10
   wanderWaitTime: 5
+--- !u!114 &-600186741591678895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3512296260308043401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8518b80d6196c7e4b9fa95a263f323a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropRate: 0.2
+  itemPrefab: {fileID: 2606856256497826601, guid: cf1e7733325ebad43b7c4787e3eea78b, type: 3}
+  number: 1
 --- !u!1 &3583604058283882365
 GameObject:
   m_ObjectHideFlags: 0

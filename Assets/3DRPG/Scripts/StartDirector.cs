@@ -11,7 +11,7 @@ public class StartDirector : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            SceneManager.LoadScene("GameScene");
+            SceneManager.LoadScene("Main");
         }
     }
 }
