@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class Goal_manager : MonoBehaviour
 {
+    public TimerController timerController;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
 
@@ -12,8 +13,14 @@ public class Goal_manager : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
+
+            if (timerController != null)
+            {
+                timerController.Finish();
+            }
+            
             Debug.Log("ゴールしました");
-            //SceneManager.LoadScene("end"); 
+            SceneManager.LoadScene("end"); 
         }
     }
 }
