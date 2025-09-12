@@ -742,6 +742,7 @@ GameObject:
   - component: {fileID: -6950016533249621424}
   - component: {fileID: 6469235316905593919}
   - component: {fileID: 5215239970805788478}
+  - component: {fileID: 293833892249419951}
   m_Layer: 9
   m_Name: Slime_Green
   m_TagString: Untagged
@@ -801,7 +802,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 5
   m_Acceleration: 3
   avoidancePriority: 50
   m_AngularSpeed: 180
@@ -820,7 +821,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7479121331106471373}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 510a2d9393c36fd4cbd658ad8b917bdb, type: 3}
   m_Name: 
@@ -1021,6 +1022,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &293833892249419951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7479121331106471373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da7d8ac969d08c448b9e54bacbbc5fb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastLayermask:
+    serializedVersion: 2
+    m_Bits: 0
+  wanderRadius: 10
+  wanderWaitTime: 5
 --- !u!1 &7489504495843317739
 GameObject:
   m_ObjectHideFlags: 0

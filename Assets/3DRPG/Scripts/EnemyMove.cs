@@ -11,6 +11,7 @@ public class EnemyMove : MonoBehaviour
     
     private NavMeshAgent _agent;
     private EnemyStatus _status;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

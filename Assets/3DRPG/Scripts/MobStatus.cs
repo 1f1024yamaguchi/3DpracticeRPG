@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class MobStatus : MonoBehaviour
 {
+    // Hpが変化したことを通知するイベント
+    //引数：現在のhp,最大hp
+    public event Action<float, float> OnLifeChanged;
     public enum StateEnum
     {
         Normal,//通常
@@ -49,12 +53,17 @@ public class MobStatus : MonoBehaviour
         _life = lifeMax;
         
         _animator = GetComponentInChildren<Animator>();
+        
+
+        //ゲーム開始時にhp情報を通知
+        OnLifeChanged?.Invoke(_life, lifeMax);     
     }
 
     //キャラクターが倒れた時の処理を記述する
     protected virtual void OnDie()
     {
-
+        //ライフゲージの表示を終了する
+        //LifeGaugeContainer.Instance.Remove(this);
     }
 
     //指定値のダメージを受ける
@@ -73,6 +82,11 @@ public class MobStatus : MonoBehaviour
 
         _life -= damage;
         Debug.Log($"ダメージを受けた: {damage}, 残りライフ: {_life}");
+
+        //ダメージを受けたことを通知
+        OnLifeChanged?.Invoke(_life, lifeMax);
+
+
         if (_life > 0) return;
 
         _state = StateEnum.Die;
@@ -135,6 +149,19 @@ public class MobStatus : MonoBehaviour
         //_animator.SetTrigger("Guard"); //ガードアニメーション再生
         _animator.SetBool("IsGuarding", true);
         Debug.Log("ガード状態になった！ 現在のステート: " + _state);
+    }
+
+    public void Heal(int amount)
+    {
+        //死んでる場合は回復しない
+        if(_state == StateEnum.Die) return;
+
+        _life += amount;
+
+        //最大HPは越えない
+        _life = Mathf.Min(_life, lifeMax);
+
+        OnLifeChanged?.Invoke(_life, lifeMax);
     }
 
 

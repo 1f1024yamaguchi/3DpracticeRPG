@@ -40,6 +40,11 @@ public class PlayerEffectManager : MonoBehaviour
                 }
                 break;
 
+            case Item.ItemType.Heal_Potion:
+
+                _mobStatus.Heal(25);
+                break;
+
             
         }
     }

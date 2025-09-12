@@ -10,7 +10,8 @@ public class Item : MonoBehaviour
         //アイテムの種類定義
         SpeedUp,
         Attack_Power,
-        Orb_of_Protecton
+        Orb_of_Protecton,
+        Heal_Potion,
     }
 
     [SerializeField] private ItemType type;

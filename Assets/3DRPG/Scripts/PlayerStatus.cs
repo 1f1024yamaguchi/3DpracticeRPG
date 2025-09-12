@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerStatus : MobStatus
 {
@@ -11,6 +12,11 @@ public class PlayerStatus : MobStatus
     public bool IsGuardEffective { get; private set;}
     //実際にガードが有効かどうかのフラグ
     
+    
+    
+
+
+    
 
 
 
@@ -19,7 +25,8 @@ public class PlayerStatus : MobStatus
     {
         base.Start(); // MobStatus の Start() を実行
         _playerController = GetComponent<PlayerController>();
-        
+
+           
         
         
     }
