@@ -8,9 +8,11 @@ public class PlayerStatus : MobStatus
     //[SerializeField] private float knockbackPower = 100f; //吹っ飛ぶ強さ 不要になった
     private PlayerController _playerController; //PlayerControllerを保持
     private Coroutine _attackBuffCoroutine;
-    private int _originalAttackPower;
+    private int _originalAttackPower; //元の攻撃力を保持する変数
+    [SerializeField] private ParticleSystem attackBuffParticles;
 
     public bool IsGuardEffective { get; private set;}
+
     //実際にガードが有効かどうかのフラグ
 
     protected override void OnDie()
@@ -37,7 +39,7 @@ public class PlayerStatus : MobStatus
     {
         base.Start(); // MobStatus の Start() を実行
         _playerController = GetComponent<PlayerController>();
-        _originalAttackPower = attackPower;
+        _originalAttackPower = attackPower; //初期攻撃力を保存
 
            
         
@@ -65,36 +67,20 @@ public class PlayerStatus : MobStatus
             _playerController.ApplyKnockback(attackDirection, finalKnockbackPower);
         }
     }
-
-    // PlayerEffectManagerから呼び出されるメソッド
-    public void ApplyAttackBuff(float duration, int multiplier)
+    public void BuffAttackPower(int multiplier)
     {
-        if(_attackBuffCoroutine != null)
-        {
-            StopCoroutine(_attackBuffCoroutine);
-            
-        }
-        _attackBuffCoroutine = StartCoroutine(AttackBuffCoroutine(duration, multiplier));
-    
+        attackPower = _originalAttackPower * multiplier;
+        Debug.Log("攻撃力アップ！ 現在の攻撃力: " + attackPower);
     }
 
-    //一定時間だけ攻撃力を変更し、元に戻す
-    private IEnumerator AttackBuffCoroutine(float duration, int multiplier)
+    public void ResetAttackPower()
     {
-        
-
-        //攻撃力を二倍にする
-        attackPower = _originalAttackPower * multiplier;
-        Debug.Log("現在の攻撃力" + attackPower);
-
-        //指定した時間待つ
-        yield return new WaitForSeconds(duration);
-
         //攻撃力を元に戻す
         attackPower = _originalAttackPower;
-        Debug.Log("攻撃力アップ終了" + attackPower);
-        _attackBuffCoroutine = null;
+        Debug.Log("攻撃力アップ効果終了。現在の攻撃力: " + attackPower);
     }
+
+
 
     public void OnGuardStart()
     {
