@@ -1,17 +1,29 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 using System;
 
 public class PlayerStatus : MobStatus
 {
     //[SerializeField] private float knockbackPower = 100f; //吹っ飛ぶ強さ 不要になった
     private PlayerController _playerController; //PlayerControllerを保持
-    private Coroutine attackBuffCoroutine;
-    private int originalAttack;
+    private Coroutine _attackBuffCoroutine;
+    private int _originalAttackPower;
 
     public bool IsGuardEffective { get; private set;}
     //実際にガードが有効かどうかのフラグ
+
+    protected override void OnDie()
+    {
+        base.OnDie();
+        StartCoroutine(GoToGameOverCoroutine());
+    }
     
+    private IEnumerator GoToGameOverCoroutine()
+    {
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene("GameOverScene");
+    }
     
     
 
@@ -25,6 +37,7 @@ public class PlayerStatus : MobStatus
     {
         base.Start(); // MobStatus の Start() を実行
         _playerController = GetComponent<PlayerController>();
+        _originalAttackPower = attackPower;
 
            
         
@@ -56,31 +69,31 @@ public class PlayerStatus : MobStatus
     // PlayerEffectManagerから呼び出されるメソッド
     public void ApplyAttackBuff(float duration, int multiplier)
     {
-        if(attackBuffCoroutine != null)
+        if(_attackBuffCoroutine != null)
         {
-            StopCoroutine(attackBuffCoroutine);
-            attackPower = originalAttack;
+            StopCoroutine(_attackBuffCoroutine);
+            
         }
-        attackBuffCoroutine = StartCoroutine(AttackBuffCoroutine(duration, multiplier));
+        _attackBuffCoroutine = StartCoroutine(AttackBuffCoroutine(duration, multiplier));
     
     }
 
     //一定時間だけ攻撃力を変更し、元に戻す
     private IEnumerator AttackBuffCoroutine(float duration, int multiplier)
     {
-        int originalAttack = attackPower;
+        
 
         //攻撃力を二倍にする
-        attackPower *= multiplier;
+        attackPower = _originalAttackPower * multiplier;
         Debug.Log("現在の攻撃力" + attackPower);
 
         //指定した時間待つ
         yield return new WaitForSeconds(duration);
 
         //攻撃力を元に戻す
-        attackPower = originalAttack;
+        attackPower = _originalAttackPower;
         Debug.Log("攻撃力アップ終了" + attackPower);
-        attackBuffCoroutine = null;
+        _attackBuffCoroutine = null;
     }
 
     public void OnGuardStart()
