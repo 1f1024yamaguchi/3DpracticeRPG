@@ -24,7 +24,7 @@ public class GameOverTextAnimator : MonoBehaviour
             });
         DOVirtual.DelayedCall(10, () =>
         {
-            SceneManager.LoadScene("TitleScene");
+            SceneManager.LoadScene("Start");
         });
     }
 
