@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement; //LoadSceneを使うために必要
+using unityroom.Api;
 
 public class ResultController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class ResultController : MonoBehaviour
         float seconds = Mathf.FloorToInt(finalTime % 60);
         float milliseconds = (finalTime % 1) * 100;
         resultTimeText.text = string.Format("Time: {0:00}:{1:00}.{2:00}", minutes, seconds, milliseconds);
+
+        UnityroomApiClient.Instance.SendScore(1,finalTime , ScoreboardWriteMode.HighScoreAsc);
     }
     
 

@@ -80,7 +80,7 @@ public class VehiclePath : MonoBehaviour
         lastPosition = transform.position;
 
         isReturning = false;
-        isMoving = true; //再び動き出す
+        
     }
 
     public void StartMoving()

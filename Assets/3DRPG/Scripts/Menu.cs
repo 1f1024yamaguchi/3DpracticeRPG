@@ -32,6 +32,8 @@ public class Menu : MonoBehaviour
         
         //Inventoryという名前のアクションを取得する
         _inventoryAction = playerInput.actions["Inventory"];
+        Cursor.visible = false; //マウスカーソル非表示
+        Cursor.lockState = CursorLockMode.Locked;//カーソルロック
         
     
     }
@@ -57,10 +59,21 @@ public class Menu : MonoBehaviour
         pausePanel.SetActive(false);
     }
 
-    // Update is called once per frame
+    
     private void ToggleItemsDialog()
     {
         itemsDialog.Toggle();
+
+        if(itemsDialog.gameObject.activeSelf) //アイテムが開いている
+        {
+            Cursor.visible = true; //マウスカーソルがあらわれる
+            Cursor.lockState = CursorLockMode.None;//カーソルロック解除
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
         
     }
     
