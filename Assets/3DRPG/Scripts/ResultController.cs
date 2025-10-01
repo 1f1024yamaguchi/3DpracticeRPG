@@ -14,14 +14,14 @@ public class ResultController : MonoBehaviour
     {
         canInput =false; //最初は入力を受け付けない
         StartCoroutine(EnableInputAfterDelay(3f));
-        float finalTime = TimerController.finalTime;
+        float finalTime = GameManager.Instance.finalTime;
 
         float minutes = Mathf.FloorToInt(finalTime / 60);
         float seconds = Mathf.FloorToInt(finalTime % 60);
         float milliseconds = (finalTime % 1) * 100;
         resultTimeText.text = string.Format("Time: {0:00}:{1:00}.{2:00}", minutes, seconds, milliseconds);
 
-        UnityroomApiClient.Instance.SendScore(1,finalTime , ScoreboardWriteMode.HighScoreAsc);
+        
     }
     
 

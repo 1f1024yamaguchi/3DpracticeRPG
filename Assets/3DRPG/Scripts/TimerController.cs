@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using unityroom.Api;
 
 public class TimerController : MonoBehaviour
 {
@@ -38,8 +40,15 @@ public class TimerController : MonoBehaviour
 
     public void Finish()
     {
+        Debug.Log("Finishメソッドが呼ばれました。現在のタイムは: " + timer);
         isRunning = false; //タイマーを止める
-        finalTime = timer; //変数に最終タイムを保存
+        GameManager.Instance.finalTime = timer; //GameManagerに最終タイムを保存
+        Debug.Log("GameManagerにタイムを保存しました: " + GameManager.Instance.finalTime);
+        //float scoreInMilliseconds = timer * 1000f;
+
+        //finalTimeの値を送信する
+        UnityroomApiClient.Instance.SendScore(1, timer , ScoreboardWriteMode.HighScoreAsc);
+
     }
 
 }
