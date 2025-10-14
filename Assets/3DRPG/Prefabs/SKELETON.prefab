@@ -863,7 +863,7 @@ MonoBehaviour:
   onTriggerStay:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2064529200132487229}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: EnemyMove, Assembly-CSharp
         m_MethodName: OnDetectObject
         m_Mode: 0
@@ -918,8 +918,6 @@ GameObject:
   - component: {fileID: 611422280918881947}
   - component: {fileID: 254878122779866331}
   - component: {fileID: 608130040805377431}
-  - component: {fileID: 2064529200132487229}
-  - component: {fileID: 1023974735680033204}
   - component: {fileID: 7085080106007940662}
   - component: {fileID: 5386949420767810153}
   - component: {fileID: 1108170871176120237}
@@ -1009,39 +1007,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65366a9221fadaf499834766aa17bf8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeMax: 20
+  lifeMax: 19
   knockbackResistance: 1
-  attackPower: 2
---- !u!114 &2064529200132487229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3512296260308043401}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 510a2d9393c36fd4cbd658ad8b917bdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  raycastLayermask:
-    serializedVersion: 2
-    m_Bits: 1
---- !u!114 &1023974735680033204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3512296260308043401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b654685f96bb754b813b71afc0a2960, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeMax: 5
-  knockbackResistance: 1
-  attackPower: 5
+  attackPower: 15
 --- !u!114 &7085080106007940662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1056,7 +1024,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 1
   attackCollider: {fileID: 4643210236690821206}
-  attackKnockbackPower: 8
+  attackKnockbackPower: 1.4
 --- !u!136 &5386949420767810153
 CapsuleCollider:
   m_ObjectHideFlags: 0
