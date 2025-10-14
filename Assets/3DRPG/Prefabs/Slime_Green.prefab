@@ -867,7 +867,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeMax: 10
   knockbackResistance: 1
-  attackPower: 2
+  attackPower: 5
 --- !u!114 &2728522748408393533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 0.5
   attackCollider: {fileID: 3342356238972515663}
-  attackKnockbackPower: 1.5
+  attackKnockbackPower: 1.2
 --- !u!114 &1634241066330826721
 MonoBehaviour:
   m_ObjectHideFlags: 0
