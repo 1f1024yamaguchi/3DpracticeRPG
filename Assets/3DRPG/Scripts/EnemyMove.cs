@@ -44,7 +44,7 @@ public class EnemyMove : MonoBehaviour
             Vector3 eyePos = transform.position + Vector3.up * 1.5f;
             //_raycastHitsに、ヒットしたColliderや座標情報などが格納される。RaycastAllとRaycastNonAllocは同等の機能だが、RaycastNonAllocだとメモリにゴミが残らないのでこちらを推奨
             var hitCount = Physics.RaycastNonAlloc(eyePos, direction, _raycastHits, distance, raycastLayermask);
-            Debug.Log("hitCount: " + hitCount);
+            //Debug.Log("hitCount: " + hitCount);
             if (hitCount ==0)
             {
                 //本作のプレイヤーはcharactercontrollerを使っていて、colliderは使っていないのでRaycastはヒットしない。つまり、ヒット数が0であればプレイヤーとの間に障害物はないということになる
