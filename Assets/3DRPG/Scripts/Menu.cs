@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class Menu : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Menu : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
 
     private InputAction _inventoryAction; //Inventoryアクションを保持す変数数
+    [SerializeField] private string gamepadSchemeName ="Gamepad";
 
 
 
@@ -32,24 +34,58 @@ public class Menu : MonoBehaviour
         
         //Inventoryという名前のアクションを取得する
         _inventoryAction = playerInput.actions["Inventory"];
-        Cursor.visible = false; //マウスカーソル非表示
-        Cursor.lockState = CursorLockMode.Locked;//カーソルロック
+
+        //コントロール変更イベントを登録
+        playerInput.onControlsChanged += OnControlsChanged;
+
+        //UIマップを無効化
+        playerInput.actions.FindActionMap("UI").Disable();
+
+        //ゲーム開始時にコンソール状態を更新
+        UpdateCursorState(); 
+
+
+        //Cursor.visible = false; //マウスカーソル非表示
+        //Cursor.lockState = CursorLockMode.Locked;//カーソルロック
         
     
+    }
+    
+    private void OnDestroy()
+    {
+        if (playerInput != null)
+        {
+            playerInput.onControlsChanged -= OnControlsChanged;
+        }
+    }
+
+    private void OnControlsChanged(PlayerInput input)
+    {
+        UpdateCursorState();
     }
 
     void Update()
     {
         if (_inventoryAction.WasPressedThisFrame())
         {
-            ToggleItemsDialog();
+            if (!pausePanel.activeSelf)
+            {
+                ToggleItemsDialog();
+            }
+            
         }
     }
+
     //ゲームを一時停止する
     private void Pause()
     {
         Time.timeScale = 0; //Time.timeScaleで時間の流れの速さを決める。0だと時間が停止する。
         pausePanel.SetActive(true);
+
+        playerInput.SwitchCurrentActionMap("UI");
+        EventSystem.current.SetSelectedGameObject(resumeButton.gameObject);
+
+        UpdateCursorState();
 
     }
     //ゲームを再開する
@@ -57,6 +93,11 @@ public class Menu : MonoBehaviour
     {
         Time.timeScale = 1;
         pausePanel.SetActive(false);
+
+        playerInput.SwitchCurrentActionMap("Player");
+        UpdateCursorState();
+
+        
     }
 
     
@@ -66,15 +107,52 @@ public class Menu : MonoBehaviour
 
         if(itemsDialog.gameObject.activeSelf) //アイテムが開いている
         {
-            Cursor.visible = true; //マウスカーソルがあらわれる
-            Cursor.lockState = CursorLockMode.None;//カーソルロック解除
+            //UIマップを有効にする
+            playerInput.actions.FindActionMap("UI").Enable();
+            
         }
+        else
+        {
+            //UIマップのみ無効化
+            playerInput.actions.FindActionMap("UI").Disable();
+        }
+
+        //どちらの場合もカーソル状態を更新
+        UpdateCursorState();        
+    }
+
+    //カーソルの表示・非表示を更新
+    private void UpdateCursorState()
+    {
+        bool isUiOpen = itemsDialog.gameObject.activeSelf || pausePanel.activeSelf;
+        bool isGamepad = playerInput.currentControlScheme == gamepadSchemeName;
+
+        if (isUiOpen)
+        {
+
+            if (isGamepad)
+            {
+                //UIが開き、かつゲームパッド使用中はカーソル非表示
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+
+            }
+            else
+            {
+                // UIが開き、かつキーボードマウス使用中 -> カーソル表示
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+
+
+            }
+
+        }
+
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
-        
     }
     
 }

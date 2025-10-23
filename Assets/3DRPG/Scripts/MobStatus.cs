@@ -81,7 +81,7 @@ public class MobStatus : MonoBehaviour
         // }
 
         _life -= damage;
-        Debug.Log($"ダメージを受けた: {damage}, 残りライフ: {_life}");
+        //Debug.Log($"ダメージを受けた: {damage}, 残りライフ: {_life}");
 
         //ダメージを受けたことを通知
         OnLifeChanged?.Invoke(_life, lifeMax);
@@ -118,14 +118,14 @@ public class MobStatus : MonoBehaviour
     {
         if (_state == StateEnum.Die  ) return;
         _state = StateEnum.Normal;
-        Debug.Log("Normal状態に移行しました。現在のステート: " + _state);
+        //Debug.Log("Normal状態に移行しました。現在のステート: " + _state);
 
         //MobはIsGuardingを持たないので設定しないようにする。
 
         if (_animator.parameters.Any(p => p.name =="IsGuarding"))
         {
             _animator.SetBool("IsGuarding" , false); 
-            Debug.Log("ガード解除！現在のステート: " + _state);
+            //Debug.Log("ガード解除！現在のステート: " + _state);
         }
 
         
@@ -148,7 +148,7 @@ public class MobStatus : MonoBehaviour
         _state = StateEnum.Guard;
         //_animator.SetTrigger("Guard"); //ガードアニメーション再生
         _animator.SetBool("IsGuarding", true);
-        Debug.Log("ガード状態になった！ 現在のステート: " + _state);
+        //Debug.Log("ガード状態になった！ 現在のステート: " + _state);
     }
 
     public void Heal(int amount)

@@ -17,7 +17,7 @@ public class MobAttack : MonoBehaviour
         _status = GetComponent<MobStatus>();
         if (_status == null)
         {
-            Debug.LogError("MobStatusコンポーネントがアタッチされていません！", this);
+            //Debug.LogError("MobStatusコンポーネントがアタッチされていません！", this);
         }
     }
 
@@ -26,7 +26,7 @@ public class MobAttack : MonoBehaviour
     {
         if (_status == null)
         {
-            Debug.LogError("MobStatus が null です！ MobStatus が正しくアタッチされているか確認してください。", this);
+            //Debug.LogError("MobStatus が null です！ MobStatus が正しくアタッチされているか確認してください。", this);
             return;
         }
         if (!_status.IsAttackable) return;
@@ -58,7 +58,7 @@ public class MobAttack : MonoBehaviour
         {
             if (playerStatus.IsGuardEffective)
             {
-                Debug.Log("攻撃をガードされた。ダメージ０");
+                //Debug.Log("攻撃をガードされた。ダメージ０");
                 return;
             }
 
@@ -77,7 +77,7 @@ public class MobAttack : MonoBehaviour
             // (基本攻撃力 × この技のノックバック倍率)
             float finalKnockbackPower = attackerPower * attackKnockbackPower;
 
-            Debug.Log(" 吹っ飛ばし威力計算 attackerPower=" + attackerPower + ", finalKnockbackPower=" + finalKnockbackPower);
+            //Debug.Log(" 吹っ飛ばし威力計算 attackerPower=" + attackerPower + ", finalKnockbackPower=" + finalKnockbackPower);
 
             //ダメージと吹っ飛ぶ威力を相手に伝える
             playerStatus.Damage(attackerPower, attackDirection, finalKnockbackPower);

@@ -64,14 +64,14 @@ public class PlayerController : MonoBehaviour
 
         if (_run == null)
         {
-            Debug.LogError("Runアクションなし");
+            //Debug.LogError("Runアクションなし");
         }
 
     }
 
     public void ApplyKnockback(Vector3 direction, float power)
     {
-        Debug.Log("★★★ Step 3: ApplyKnockbackが呼ばれました！ power=" + power);
+        //Debug.Log("★★★ Step 3: ApplyKnockbackが呼ばれました！ power=" + power);
         //吹っ飛ばしの初速を計算
         _knockbackVector = direction * power;
         //少し上に飛び上がるようにすると見栄えが良くなる
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         }
         
         bool isGuarding = _guard.IsPressed();
-        Debug.Log("IsGuarding: " + isGuarding);
+        //Debug.Log("IsGuarding: " + isGuarding);
 
         if (isGuarding)
         {
@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("IsGuarding", isGuarding); //Animatorに反映
 
-        Debug.Log(_characterController.isGrounded ? "地面にいます" : "空中です");
+        //Debug.Log(_characterController.isGrounded ? "地面にいます" : "空中です");
 
         if (_attack.WasPressedThisFrame())
         {
@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviour
             if (_jump.WasPressedThisFrame() && !isGuarding) //ガード中はジャンプできない
             {
                 //ジャンプ処理
-                Debug.Log("ジャンプ!");
+                //Debug.Log("ジャンプ!");
                 _moveVelocity.y = jumpPower; //ジャンプの際は上方向に移動させる
                 animator.SetBool("IsJumping", true); //ジャンプアニメーションを開始
             }
@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour
         
         //animator.SetFloat("MoveSpeed", new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude);
         float moveSpeedValue = new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude;
-        Debug.Log("MoveSpeed: " + moveSpeedValue);
+        //Debug.Log("MoveSpeed: " + moveSpeedValue);
         animator.SetFloat("MoveSpeed", moveSpeedValue);
 
         // if (Input.GetKeyDown(KeyCode.LeftShift)) 
