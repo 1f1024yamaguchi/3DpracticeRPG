@@ -33,6 +33,9 @@ public class PlayerController : MonoBehaviour
     public AudioClip sound1;
     AudioSource audioSource;
 
+    // 「今、プレイヤーが走っているか」を読み取れる
+    public bool isRunning { get; private set; }
+
     
 
     
@@ -83,6 +86,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (!_characterController.enabled) return;
+
+        isRunning = false;
 
         //すっ飛ばし処理
         if (_status.State == MobStatus.StateEnum.Knockback)
@@ -142,7 +147,8 @@ public class PlayerController : MonoBehaviour
 
         if (_status.IsMovable && !isGuarding) //移動可能な状態であればユーザー入力を移動に反映する、ガード注出ない場合のみ移動
         {
-            bool isRunning = _run.IsPressed();
+            //bool isRunning = _run.IsPressed();
+            isRunning = _run.IsPressed();      // パブリックなプロパティを更新
 
             float currentSpeed;
             if (isRunning)

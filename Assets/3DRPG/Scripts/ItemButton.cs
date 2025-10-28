@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
-
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Button))]
 public class ItemButton : MonoBehaviour
@@ -27,6 +27,7 @@ public class ItemButton : MonoBehaviour
             }
         }
     }
+
     [SerializeField] private ItemTypeSpriteMap[] itemSprits;
     [SerializeField] private Image image;
     [SerializeField] private Text number;
@@ -36,6 +37,8 @@ public class ItemButton : MonoBehaviour
     private PlayerEffectManager _playerEffectManager;
     private ItemsDialog _itemsDialog;
 
+    private InputSystem_Actions _controls;
+
     private void Awake()
     {
         _button = GetComponent<Button>();
@@ -44,10 +47,32 @@ public class ItemButton : MonoBehaviour
         //プレイヤーとUI管理クラスを見つけて変数に保存
         _playerEffectManager = FindObjectOfType<PlayerEffectManager>();
         _itemsDialog = GetComponentInParent<ItemsDialog>();
+
+        _controls = new InputSystem_Actions();
+    }
+
+    private void OnEnable()
+    {
+        _controls.UI.UseItem.Enable();
+        _controls.UI.UseItem.performed += OnUseItem; 
+    }
+
+    private void OnDisable()
+    {
+        _controls.UI.UseItem.performed -= OnUseItem;
+        _controls.UI.UseItem.Disable();
+    }
+
+    private void OnUseItem(InputAction.CallbackContext context)
+    {
+        if(_button.interactable)
+        {
+            OnClick();
+        }
+
     }
 
   
-
     private void OnClick()
     {
         //アイテムが0だったら使えないようにする

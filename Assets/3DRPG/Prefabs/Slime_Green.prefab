@@ -882,7 +882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 0.5
   attackCollider: {fileID: 3342356238972515663}
-  attackKnockbackPower: 1.2
+  attackKnockbackPower: 1.4
 --- !u!114 &1634241066330826721
 MonoBehaviour:
   m_ObjectHideFlags: 0

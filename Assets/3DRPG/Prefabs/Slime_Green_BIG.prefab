@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeMax: 15
-  knockbackResistance: 1
+  knockbackResistance: 3
   attackPower: 8
 --- !u!114 &529210832241857035
 MonoBehaviour:

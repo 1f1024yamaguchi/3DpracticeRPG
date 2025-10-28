@@ -1075,7 +1075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0c7f114cc247b542b65c9f5ca19e8c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyDistance: 30
+  destroyDistance: 40
 --- !u!114 &4632574908664974135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1090,7 +1090,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raycastLayermask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   wanderRadius: 10
   wanderWaitTime: 5
 --- !u!114 &-600186741591678895
