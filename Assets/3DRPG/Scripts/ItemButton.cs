@@ -5,8 +5,12 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+
+//using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Button))]
+
 public class ItemButton : MonoBehaviour
 {
     public OwnedItemsData.OwnedItem OwnedItem
@@ -65,7 +69,8 @@ public class ItemButton : MonoBehaviour
 
     private void OnUseItem(InputAction.CallbackContext context)
     {
-        if(_button.interactable)
+        var selected = EventSystem.current.currentSelectedGameObject;
+        if(selected ==this.gameObject && _button.interactable)
         {
             OnClick();
         }

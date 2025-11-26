@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public  float runSpeed = 6; //ダッシュ時の移動速度
     [SerializeField] private float _knockbackDrag = 4f; //吹っ飛ばしの勢いを減速させる抵抗値
 
+    [Header("斬撃エフェクト設定")]
+    [SerializeField] public GameObject[] slashEffectPrefabs; // 斬撃Prefabの*配列*
+    [SerializeField] public Transform effectSpawnPoint;      // エフェクト発生場所
+    [SerializeField] public float effectDuration = 1.0f;  // エフェクトが消えるまでの時間
 
     private CharacterController _characterController; 
     private Transform _transform; 
@@ -35,6 +39,7 @@ public class PlayerController : MonoBehaviour
 
     // 「今、プレイヤーが走っているか」を読み取れる
     public bool isRunning { get; private set; }
+
 
     
 
@@ -241,5 +246,28 @@ public class PlayerController : MonoBehaviour
         // {
         //     mobStatus.CancelGuard(); // ガード解除
         // }
+    }
+
+    void PlaySlashEffect(int effectIndex)
+    {
+        Transform spawnPoint = (effectSpawnPoint != null) ? effectSpawnPoint : this.transform;
+
+        GameObject effectInstance = Instantiate(
+            slashEffectPrefabs[effectIndex],
+            spawnPoint.position,
+            spawnPoint.rotation
+        );
+
+        Destroy(effectInstance, effectDuration);
+    }
+
+    public void PlaySlashEffect_Attack1()
+    {/// 【アニメーションイベント用】Attack1のエフェクト（0番目）を再生
+        PlaySlashEffect(0);
+    }
+
+    public void PlayeSlashEffect_Attack2()
+    {/// 【アニメーションイベント用】For_Back_Attackのエフェクト（1番目）を再生
+        PlaySlashEffect(1);
     }
 }
