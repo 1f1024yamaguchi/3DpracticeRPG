@@ -22,11 +22,11 @@ public class WallTransparencyController : MonoBehaviour
         if (lookTarget == null) return;
         
          //カメラからプレイヤーへの方向と距離を計算
-        Vector3 origin = transform.position;
-        Vector3 direction = lookTarget.position - origin;
+        Vector3 origin = transform.position; //カメラ位置
+        Vector3 direction = lookTarget.position - origin; //ターゲットへの方向
         // direction は lookTarget.position - transform.position で計算したもの
         Debug.DrawRay(transform.position, direction, Color.red);
-        float distance = direction.magnitude;
+        float distance = direction.magnitude; //ターゲットまでの距離
 
         RaycastHit hit;
         if (Physics.Raycast(origin, direction, out hit, distance))

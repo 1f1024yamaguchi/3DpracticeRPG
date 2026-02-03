@@ -122,4 +122,6 @@ public class AudioSetting_Script : MonoBehaviour
         BGMaudioSource.GetComponent<AudioSource>().clip = BGMs[bgmIndex];
         BGMaudioSource.GetComponent<AudioSource>().Play();
     }
+
+    
 }
