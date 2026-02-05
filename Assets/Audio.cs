@@ -39,10 +39,10 @@ public class Audio : MonoBehaviour
         
         audioMixer.SetFloat("SE", savedSE);
 
-        if(BGM_SE_Panel != null)
-        {
-            BGM_SE_Panel.SetActive(false);
-        }
+        // if(BGM_SE_Panel != null)
+        // {
+        //     BGM_SE_Panel.SetActive(false);
+        // }
 
 
         //ミキサーのvolumeにスライダーのvloumeをいれる。
@@ -64,46 +64,46 @@ public class Audio : MonoBehaviour
     void Update()
     {
 
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            if(!Opened_Audio_Setting)
-            {
-                Open_Audio_Setting();
-            }
-            else
-            {
-                Close_Audio_Setting();
-            }
+        // if(Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     if(!Opened_Audio_Setting)
+        //     {
+        //         Open_Audio_Setting();
+        //     }
+        //     else
+        //     {
+        //         Close_Audio_Setting();
+        //     }
 
 
-        }
+        // }
 
         
     }
 
     
-                    //音量調節画面を開く
-        public void Open_Audio_Setting()
-        {
-            if(!Opened_Audio_Setting)
-            {
-                if (BGM_SE_Panel != null) BGM_SE_Panel.SetActive(true);
+        //             //音量調節画面を開く
+        // public void Open_Audio_Setting()
+        // {
+        //     if(!Opened_Audio_Setting)
+        //     {
+        //         if (BGM_SE_Panel != null) BGM_SE_Panel.SetActive(true);
                 
-                Opened_Audio_Setting = true;
-                PauseGame();
-            }
-        }
+        //         Opened_Audio_Setting = true;
+        //         PauseGame();
+        //     }
+        // }
 
-            //音量調節画面を閉じる
-        public void Close_Audio_Setting()
-        {
-            if(Opened_Audio_Setting)
-            {
-                if (BGM_SE_Panel != null) BGM_SE_Panel.SetActive(false);
-                Opened_Audio_Setting = false;
-                ResumeGame();
-            }
-        }
+        //     //音量調節画面を閉じる
+        // public void Close_Audio_Setting()
+        // {
+        //     if(Opened_Audio_Setting)
+        //     {
+        //         if (BGM_SE_Panel != null) BGM_SE_Panel.SetActive(false);
+        //         Opened_Audio_Setting = false;
+        //         ResumeGame();
+        //     }
+        // }
 
         public void SetBGM(float volume)
         {
@@ -119,15 +119,15 @@ public class Audio : MonoBehaviour
             PlayerPrefs.Save();
         }   
 
-        private void PauseGame()
-        {
-            Time.timeScale = 0f;// 時間の流れをゼロにする
+        // private void PauseGame()
+        // {
+        //     Time.timeScale = 0f;// 時間の流れをゼロにする
 
 
-        }
+        // }
 
-        private void ResumeGame()
-        {
-            Time.timeScale = 1f;
-        }
+        // private void ResumeGame()
+        // {
+        //     Time.timeScale = 1f;
+        // }
 }

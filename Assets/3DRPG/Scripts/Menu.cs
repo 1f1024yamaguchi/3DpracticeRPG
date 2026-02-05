@@ -14,6 +14,7 @@ public class Menu : MonoBehaviour
 
     [SerializeField] private Button itemsButton;
     [SerializeField] private PlayerInput playerInput;
+    //[SerializeField] private Button pauseButton;
 
     private InputAction _inventoryAction; //Inventoryアクションを保持す変数数
     [SerializeField] private string gamepadSchemeName ="Gamepad";
