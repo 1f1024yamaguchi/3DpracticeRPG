@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class UIManager : MonoBehaviour
+public class UIManager_in_main : MonoBehaviour
 {
     [Header("UI Panels")]
     [SerializeField] private GameObject MainMenuPanel;
@@ -14,9 +14,16 @@ public class UIManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ShowMainMenu();
-        //起動時はポーズメニューを表示
+        HideAllPanels();
         
+    }
+
+        public void HideAllPanels()
+    {
+        MainMenuPanel.SetActive(false);
+        audioSettingPanel.SetActive(false);
+        sensitivetyPanel.SetActive(false);
+        // マウスカーソルを隠す設定などをここに入れても良いです
     }
 
     public void ShowMainMenu()
@@ -41,6 +48,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowSensitivitySettings()
     {
+        Debug.Log("ボタンが押されました！");
         MainMenuPanel.SetActive(false);
         audioSettingPanel.SetActive(false);
         sensitivetyPanel.SetActive(true);
