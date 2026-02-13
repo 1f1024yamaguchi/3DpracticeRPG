@@ -41,7 +41,7 @@ public class ItemButton : MonoBehaviour
     private PlayerEffectManager _playerEffectManager;
     private ItemsDialog _itemsDialog;
 
-    private InputSystem_Actions _controls;
+    
 
     private void Awake()
     {
@@ -52,20 +52,20 @@ public class ItemButton : MonoBehaviour
         _playerEffectManager = FindObjectOfType<PlayerEffectManager>();
         _itemsDialog = GetComponentInParent<ItemsDialog>();
 
-        _controls = new InputSystem_Actions();
+       
     }
 
-    private void OnEnable()
-    {
-        _controls.UI.UseItem.Enable();
-        _controls.UI.UseItem.performed += OnUseItem; 
-    }
+    // private void OnEnable()
+    // {
+    //     _controls.UI.UseItem.Enable();
+    //     _controls.UI.UseItem.performed += OnUseItem; 
+    // }
 
-    private void OnDisable()
-    {
-        _controls.UI.UseItem.performed -= OnUseItem;
-        _controls.UI.UseItem.Disable();
-    }
+    // private void OnDisable()
+    // {
+    //     _controls.UI.UseItem.performed -= OnUseItem;
+    //     _controls.UI.UseItem.Disable();
+    // }
 
     private void OnUseItem(InputAction.CallbackContext context)
     {

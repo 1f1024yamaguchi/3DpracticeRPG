@@ -18,6 +18,7 @@ public class Menu : MonoBehaviour
 
     private InputAction _inventoryAction; //Inventoryアクションを保持す変数数
     [SerializeField] private string gamepadSchemeName ="Gamepad";
+    //[SerializeField] private GameObject firstItemSlot; //最初に選択するアイテムスロット
 
 
 
@@ -110,6 +111,15 @@ public class Menu : MonoBehaviour
         {
             //UIマップを有効にする
             playerInput.actions.FindActionMap("UI").Enable();
+
+            // // 最初のアイテムを選択状態にする
+            // if (firstItemSlot != null)
+            // {
+            //     EventSystem.current.SetSelectedGameObject(null);
+            //     EventSystem.current.SetSelectedGameObject(firstItemSlot);
+            // }
+             
+
             
         }
         else

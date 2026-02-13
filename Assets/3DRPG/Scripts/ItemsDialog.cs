@@ -10,12 +10,22 @@ public class ItemsDialog : MonoBehaviour
     [SerializeField] private ItemButton itemButton;
 
     private ItemButton[] _itemButtons;
+    private bool _isInitialized = false;
+    private int _currentIndex = 0;
+
+
+
+    
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
+        if (_isInitialized) return;
+
+        // 既存の子要素（プレハブなど）があれば削除
+        foreach (Transform child in transform) Destroy(child.gameObject);
         //初期状態は非表示
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
 
         //アイテム欄を必要な分だけ複製する
         for (var i = 0; i < buttonNumber ; i++)
@@ -24,6 +34,7 @@ public class ItemsDialog : MonoBehaviour
         }
         //子要素のItemButtonを一括取得、保持しておく
         _itemButtons = GetComponentsInChildren<ItemButton>();
+        _isInitialized = true;
     }
     
     public void Toggle()
@@ -40,17 +51,24 @@ public class ItemsDialog : MonoBehaviour
             //     : null;
             // }
             RefreshItems();
-            SelectFirstInteractableButton();
+            StartCoroutine(SelectFirstButtonDelayed());
         }
+    }
+
+    private IEnumerator SelectFirstButtonDelayed()
+    {
+        yield return null; //1フレーム待つ
+        
+        SelectFirstInteractableButton();
     }
 
     public void Refresh()
     {
         RefreshItems();
         
-        if(EventSystem.current.currentSelectedGameObject == null || !EventSystem.current.currentSelectedGameObject.activeInHierarchy)
+        if(EventSystem.current.currentSelectedGameObject == null )
         {
-            SelectFirstInteractableButton();
+            StartCoroutine(SelectFirstButtonDelayed());
         }
         // for (var i = 0; i < _itemButtons.Length; i++)
         // {

@@ -90,6 +90,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //現在のactionmapがUIなら移動処理をしない
+
+        var input = GetComponent<PlayerInput>();
+
+        if(input.currentActionMap.name == "UI")
+        {
+            animator.SetFloat("MoveSpeed", 0f);
+            return;
+        }
+
+
         if (!_characterController.enabled) return;
 
         isRunning = false;
