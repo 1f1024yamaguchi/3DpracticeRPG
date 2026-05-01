@@ -3,6 +3,7 @@ using UnityEngine.AI; // NavMeshAgentを使うために必要
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(EnemyStatus))]
+
 public class EnemyMove_2 : MonoBehaviour
 {
     // --- 敵の状態を定義 ---

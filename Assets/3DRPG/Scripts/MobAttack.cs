@@ -99,8 +99,10 @@ public class MobAttack : MonoBehaviour
     //攻撃終了時に呼ばれる
     public void OnAttackFinished()
     {
+
         attackCollider.enabled= false;
         StartCoroutine(CooldownCoroutine());
+        
     }
 
     private IEnumerator CooldownCoroutine()
@@ -110,8 +112,5 @@ public class MobAttack : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

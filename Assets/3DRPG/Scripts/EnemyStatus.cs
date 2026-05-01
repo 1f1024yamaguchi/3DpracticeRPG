@@ -17,8 +17,19 @@ public class EnemyStatus : MobStatus
 
     private void Update()
     {
-        //NavMeshAgentのvelocityで速度のベクトルが取得できる
-        _animator.SetFloat("MoveSpeed" , _agent.velocity.magnitude);
+        if(_state == StateEnum.Attack)
+        {
+            _animator.SetFloat("MoveSpeed",0);
+            if(_agent.isActiveAndEnabled) _agent.isStopped = true;
+        }
+        else
+        {
+            if(_agent.isActiveAndEnabled) _agent.isStopped = false;
+            _animator.SetFloat("MoveSpeed" , _agent.velocity.magnitude);
+
+        }
+                //NavMeshAgentのvelocityで速度のベクトルが取得できる
+        //_animator.SetFloat("MoveSpeed" , _agent.velocity.magnitude);
     }
 
     protected override void OnDie()
@@ -30,7 +41,18 @@ public class EnemyStatus : MobStatus
     //倒されたときの消滅コルーチン
     private IEnumerator DestroyCoroutine()
     {
+        //playerオブジェクトからLevelSystemコンポーネントを取得して経験値を加算する
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            LevelSystem lv = player.GetComponent<LevelSystem>();
+            if (lv != null)
+            {
+                lv.AddExp(expPoint); // MobStatusで設定した経験値を送る
+            }
+        }
         yield return new WaitForSeconds(3);
+        
         Destroy(gameObject);
     }
 }

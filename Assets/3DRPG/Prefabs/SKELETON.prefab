@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 3538154305697357653}
   - component: {fileID: 1419354643663916410}
   - component: {fileID: 2376835256330085103}
+  - component: {fileID: 6350260589095173778}
   m_Layer: 6
   m_Name: AttackRangeDetector
   m_TagString: Untagged
@@ -128,6 +129,39 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 227704808094257944}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02cb4682b14b0e4a904201bc657de6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onTriggerStay:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4632574908664974135}
+        m_TargetAssemblyTypeName: EnemyMove_2, Assembly-CSharp
+        m_MethodName: OnDetectObject
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6350260589095173778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 227704808094257944}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c02cb4682b14b0e4a904201bc657de6d, type: 3}
@@ -151,6 +185,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &258803585159729101
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,6 +484,7 @@ GameObject:
   - component: {fileID: 915554617766843889}
   - component: {fileID: 4643210236690821206}
   - component: {fileID: 3374533736560955707}
+  - component: {fileID: 5805840360919103466}
   m_Layer: 6
   m_Name: AttackHitDetector
   m_TagString: Untagged
@@ -530,6 +568,42 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   onTriggerStay:
+    m_PersistentCalls:
+      m_Calls: []
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &5805840360919103466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217248684940545537}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02cb4682b14b0e4a904201bc657de6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3512296260308043401}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTriggerStay:
+    m_PersistentCalls:
+      m_Calls: []
+  onTriggerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1359940686623933471
@@ -859,13 +933,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onTriggerEnter:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3512296260308043401}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onTriggerStay:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EnemyMove, Assembly-CSharp
+      - m_Target: {fileID: 4632574908664974135}
+        m_TargetAssemblyTypeName: EnemyMove_2, Assembly-CSharp
         m_MethodName: OnDetectObject
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4632574908664974135}
+        m_TargetAssemblyTypeName: EnemyMove_2, Assembly-CSharp
+        m_MethodName: OnLostObject
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -924,6 +1025,8 @@ GameObject:
   - component: {fileID: 1482308673572110026}
   - component: {fileID: 4632574908664974135}
   - component: {fileID: -600186741591678895}
+  - component: {fileID: -7704620346461008180}
+  - component: {fileID: -4455790789507417571}
   m_Layer: 9
   m_Name: SKELETON
   m_TagString: Untagged
@@ -987,7 +1090,7 @@ NavMeshAgent:
   m_Acceleration: 3
   avoidancePriority: 50
   m_AngularSpeed: 180
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1009,7 +1112,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeMax: 19
   knockbackResistance: 1
-  attackPower: 15
+  attackPower: 13
+  expPoint: 35
+  _life: 0
 --- !u!114 &7085080106007940662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1022,9 +1127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5962989f93e03f438f52c8061f7c00a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCooldown: 1
+  attackCooldown: 0.5
   attackCollider: {fileID: 4643210236690821206}
-  attackKnockbackPower: 1.4
+  attackKnockbackPower: 2
 --- !u!136 &5386949420767810153
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1090,7 +1195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raycastLayermask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 1
   wanderRadius: 10
   wanderWaitTime: 5
 --- !u!114 &-600186741591678895
@@ -1108,6 +1213,34 @@ MonoBehaviour:
   dropRate: 0.1
   itemPrefab: {fileID: 2606856256497826601, guid: cf1e7733325ebad43b7c4787e3eea78b, type: 3}
   number: 1
+--- !u!114 &-7704620346461008180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3512296260308043401}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510a2d9393c36fd4cbd658ad8b917bdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastLayermask:
+    serializedVersion: 2
+    m_Bits: 1
+--- !u!114 &-4455790789507417571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3512296260308043401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e4d946b606053641bdc15e7d2767be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageTextPrefab: {fileID: 6318248609118205785, guid: 2893e6f90337667468148c8284c84b23, type: 3}
 --- !u!1 &3583604058283882365
 GameObject:
   m_ObjectHideFlags: 0

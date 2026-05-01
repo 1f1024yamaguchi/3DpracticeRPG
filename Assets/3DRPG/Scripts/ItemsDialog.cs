@@ -27,13 +27,17 @@ public class ItemsDialog : MonoBehaviour
         //初期状態は非表示
         //gameObject.SetActive(false);
 
+        //配列を必要なサイズで初期化
+        _itemButtons = new ItemButton[buttonNumber];
+ 
         //アイテム欄を必要な分だけ複製する
         for (var i = 0; i < buttonNumber ; i++)
         {
-            Instantiate(itemButton, transform);
+            //Instantiate(itemButton, transform);
+            _itemButtons[i] = Instantiate(itemButton, transform);
         }
         //子要素のItemButtonを一括取得、保持しておく
-        _itemButtons = GetComponentsInChildren<ItemButton>();
+        // _itemButtons = GetComponentsInChildren<ItemButton>();
         _isInitialized = true;
     }
     

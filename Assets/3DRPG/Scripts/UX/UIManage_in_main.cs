@@ -6,12 +6,21 @@ public class UIManager_in_main : MonoBehaviour
 {
     [Header("UI Panels")]
     [SerializeField] private GameObject MainMenuPanel;
+    [SerializeField] private GameObject StatusPanel;
     [SerializeField] private GameObject audioSettingPanel;
     [SerializeField] private GameObject sensitivetyPanel;
+
     [SerializeField] private GameObject start_Button;
+    [SerializeField] private GameObject status_backButton;
     [SerializeField] private GameObject Camera_backButton;
     [SerializeField] private GameObject BGM_SE_backButton;
+
     [SerializeField] private GameObject settingCanvas;
+    [SerializeField] private GameObject HPCanvas; // HPスライダークラスへの参照
+    [SerializeField] private GameObject TimerCanvas; // タイマークラスへの参照
+    [SerializeField] private GameObject LevelUp_tipsCanvas; // レベルアップのヒントを表示するキャンバスへの参照
+
+    private GameObject _currentFocusButton; // 現在選択されているボタンを追跡する変数
 
     public bool IsMenuVisible() => settingCanvas.activeSelf;
 
@@ -23,66 +32,106 @@ public class UIManager_in_main : MonoBehaviour
         
     }
 
+    void Update()
+    {
+        //メニューが開いている時だけ「磁石機能」を動かす
+        if(settingCanvas.activeSelf)
+        {
+            if(LevelUp_tipsCanvas != null && LevelUp_tipsCanvas.activeSelf)
+            {
+                return; // レベルアップのヒントが表示されている場合は、他のUI要素の選択を変更しない
+            }
+
+            if(EventSystem.current.currentSelectedGameObject ==null && _currentFocusButton != null)
+            {
+                EventSystem.current.SetSelectedGameObject(_currentFocusButton);
+            }
+        }
+    }
+
         public void HideAllPanels()
     {
         MainMenuPanel.SetActive(false);
+        StatusPanel.SetActive(false);
         audioSettingPanel.SetActive(false);
         sensitivetyPanel.SetActive(false);
         // マウスカーソルを隠す設定などをここに入れても良いです
     }
 
+    private void SwitchPanel(GameObject targetPanel, GameObject focusButton)
+    {
+        HideAllPanels();
+        targetPanel.SetActive(true);
+        _currentFocusButton = focusButton;
+        StartCoroutine(SelectAfterFrame(focusButton));
+    }
+
+
+
     public void ShowMainMenu()
     {
-        MainMenuPanel.SetActive(true);
-        audioSettingPanel.SetActive(false);
-        sensitivetyPanel.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        StartCoroutine(SelectAfterFrame(start_Button));
+        SwitchPanel(MainMenuPanel, start_Button);
 
+    }
+
+        public void ShowStatusPanel()
+    {
+        HPCanvas.SetActive(false);
+        TimerCanvas.SetActive(false);
+        SwitchPanel(StatusPanel, status_backButton);
     }
 
     public void ShowAudioSettings()
     {
-        Debug.Log("ボタンが押されました！");
-        MainMenuPanel.SetActive(false);
-        audioSettingPanel.SetActive(true);
-        sensitivetyPanel.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        StartCoroutine(SelectAfterFrame(BGM_SE_backButton));
+        SwitchPanel(audioSettingPanel, BGM_SE_backButton);
 
     }
 
 
     public void ShowSensitivitySettings()
     {
-        Debug.Log("ボタンが押されました！");
-        MainMenuPanel.SetActive(false);
-        audioSettingPanel.SetActive(false);
-        sensitivetyPanel.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(null);
-        
-        StartCoroutine(SelectAfterFrame(Camera_backButton));;
+        SwitchPanel(sensitivetyPanel, Camera_backButton);
     }
 
     public void OpenMenu()
     {
         settingCanvas.SetActive(true);
-        ShowMainMenu(); //既存のメインメニュー表示処理を呼ぶ
+        HPCanvas.SetActive(false);
+        TimerCanvas.SetActive(false);
 
-        Time.timeScale = 0f;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        //新しいマネージャーに操作の切り替えを依頼
+        if(TO_UI_OnlyManager.Instance != null)
+        {
+            TO_UI_OnlyManager.Instance.SetUIMode(true);
+        }
+
+        ShowMainMenu();
     }
 
     public void CloseMenu()
     {
         settingCanvas.SetActive(false);
         HideAllPanels();
+        HPCanvas.SetActive(true);
+        TimerCanvas.SetActive(true);
 
-        Time.timeScale = 1f;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        if(TO_UI_OnlyManager.Instance !=null)
+        {
+            TO_UI_OnlyManager.Instance.SetUIMode(false);
+        }
 
+    }
+
+    public void CloseLevelUpTips()
+    {
+        Debug.Log("OKボタンが正しく押されました！"); // これが出るか確認
+        LevelUp_tipsCanvas.SetActive(false);
+        if(TO_UI_OnlyManager.Instance !=null)
+        {
+            TO_UI_OnlyManager.Instance.SetUIMode(false);
+        }
+
+       
     }
 
     private System.Collections.IEnumerator SelectAfterFrame(GameObject obj)
@@ -93,9 +142,5 @@ public class UIManager_in_main : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

@@ -6,14 +6,15 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerStatus))]
 [RequireComponent(typeof(MobAttack))]
+
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] public float moveSpeed = 3; //通常の移動速度
-    [SerializeField] public float jumpPower = 3; //ジャンプ力
+    [SerializeField] public float moveSpeed = 3f; //通常の移動速度
+    [SerializeField] public float jumpPower = 3f; //ジャンプ力
     [SerializeField] private Transform cameraTransform; //カメラのTransform
     [SerializeField] private float rotationSpeed = 1f; //回転速度
     [SerializeField] private Animator animator;
-    [SerializeField] public  float runSpeed = 6; //ダッシュ時の移動速度
+    [SerializeField] public  float runSpeed = 6f; //ダッシュ時の移動速度
     [SerializeField] private float _knockbackDrag = 4f; //吹っ飛ばしの勢いを減速させる抵抗値
 
     [Header("斬撃エフェクト設定")]
@@ -150,7 +151,7 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("IsGuarding", isGuarding); //Animatorに反映
 
-        //Debug.Log(_characterController.isGrounded ? "地面にいます" : "空中です");
+        //Debug.Log(_characterController.isGrounded ? "地面 にいます" : "空中です");
 
         if (_attack.WasPressedThisFrame())
         {
@@ -169,7 +170,7 @@ public class PlayerController : MonoBehaviour
             float currentSpeed;
             if (isRunning)
             {
-                currentSpeed = runSpeed;
+                currentSpeed = moveSpeed *2f;   //走っているときは移動速度を2倍にする
             }
             else
             {
@@ -281,4 +282,33 @@ public class PlayerController : MonoBehaviour
     {/// 【アニメーションイベント用】For_Back_Attackのエフェクト（1番目）を再生
         PlaySlashEffect(1);
     }
+
+    //playerstatusから呼び出される、基本速度を上げるためのメソッド
+    public void AddBaseSpeed(float amount)
+    {
+        moveSpeed += amount;
+        Debug.Log($"スピードがアップしました！ 現在の基本速度: {moveSpeed}");
+    }
+
+    public void RemoveBaseSpeed(float amount)
+    {
+        moveSpeed -= amount;
+        Debug.Log($"スピードアップ効果が切れました。現在の基本速度: {moveSpeed}");
+    }
+
+    //playerstatusから呼び出される、ジャンプ力を上げるためのメソッド
+
+    public void AddBaseJump(float amount)
+    {
+        jumpPower += amount;
+        Debug.Log($"ジャンプ力がアップしました！ 現在の基本ジャンプ力: {jumpPower}");
+    }
+
+    public void RemoveBaseJump(float amount)
+    {
+        jumpPower -= amount;
+        Debug.Log($"ジャンプ力アップ効果が切れました。現在の基本ジャンプ力: {jumpPower}");
+    }
+
+
 }

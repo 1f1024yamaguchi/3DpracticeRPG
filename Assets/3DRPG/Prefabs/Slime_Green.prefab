@@ -242,6 +242,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2576180337630778146
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,8 +329,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4786437161488513737}
-        m_TargetAssemblyTypeName: EnemyMove, Assembly-CSharp
+      - m_Target: {fileID: 293833892249419951}
+        m_TargetAssemblyTypeName: EnemyMove_2, Assembly-CSharp
         m_MethodName: OnDetectObject
         m_Mode: 0
         m_Arguments:
@@ -338,6 +341,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2754947672778420892
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,6 +665,9 @@ MonoBehaviour:
   onTriggerStay:
     m_PersistentCalls:
       m_Calls: []
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6723329190648017829
 GameObject:
   m_ObjectHideFlags: 0
@@ -744,6 +753,7 @@ GameObject:
   - component: {fileID: 5215239970805788478}
   - component: {fileID: 293833892249419951}
   - component: {fileID: 5329963932584221922}
+  - component: {fileID: -7956703091739905192}
   m_Layer: 9
   m_Name: Slime_Green
   m_TagString: Untagged
@@ -807,7 +817,7 @@ NavMeshAgent:
   m_Acceleration: 3
   avoidancePriority: 50
   m_AngularSpeed: 180
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -867,7 +877,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeMax: 10
   knockbackResistance: 1
-  attackPower: 5
+  attackPower: 4
+  expPoint: 10
+  _life: 0
 --- !u!114 &2728522748408393533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -880,7 +892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5962989f93e03f438f52c8061f7c00a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCooldown: 0.5
+  attackCooldown: 1
   attackCollider: {fileID: 3342356238972515663}
   attackKnockbackPower: 1.4
 --- !u!114 &1634241066330826721
@@ -1055,6 +1067,19 @@ MonoBehaviour:
   dropRate: 0.05
   itemPrefab: {fileID: 2606856256497826601, guid: cf1e7733325ebad43b7c4787e3eea78b, type: 3}
   number: 1
+--- !u!114 &-7956703091739905192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7479121331106471373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e4d946b606053641bdc15e7d2767be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageTextPrefab: {fileID: 6318248609118205785, guid: 2893e6f90337667468148c8284c84b23, type: 3}
 --- !u!1 &7489504495843317739
 GameObject:
   m_ObjectHideFlags: 0

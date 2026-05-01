@@ -1095,7 +1095,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 1.0,
+    "m_Value": 2.0,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
@@ -2976,8 +2976,8 @@
     "m_ObjectId": "a7819da962fd48549dc0e7b563013a6e",
     "m_Title": "Dither Transparency Threshold",
     "m_Position": {
-        "x": 415.9998779296875,
-        "y": 472.800048828125
+        "x": 416.0,
+        "y": 474.0001525878906
     }
 }
 
@@ -3033,8 +3033,8 @@
     "m_ObjectId": "acc69ac7e59e4b6fbb7b3ef604dab207",
     "m_Title": "Processing by distance from the camera",
     "m_Position": {
-        "x": -1044.0,
-        "y": 382.4000244140625
+        "x": -1044.0001220703125,
+        "y": 384.00006103515627
     }
 }
 
@@ -3604,8 +3604,8 @@
     "m_ObjectId": "dc7b133a3cb9421e88cf7844ab223853",
     "m_Title": "Setting Albedo texture and color",
     "m_Position": {
-        "x": -609.5999755859375,
-        "y": -293.6000061035156
+        "x": -609.3333740234375,
+        "y": -292.0
     }
 }
 

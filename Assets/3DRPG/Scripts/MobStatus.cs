@@ -1,4 +1,5 @@
 using UnityEngine;
+
 using System.Linq;
 using System;
 
@@ -7,13 +8,19 @@ public class MobStatus : MonoBehaviour
     // Hpが変化したことを通知するイベント
     //引数：現在のhp,最大hp
     public event Action<float, float> OnLifeChanged;
+
+    //ダメージを受けた時に数字と場所を表記する。
+    public event Action<int, Vector3> OnDamageTaken;
+
     public enum StateEnum
     {
+
         Normal,//通常
         Attack,//攻撃中
         Die, //死亡
         Guard, //ガード中 
         Knockback //ノックバック中
+
     }
 
     //移動可能かどうか
@@ -32,16 +39,21 @@ public class MobStatus : MonoBehaviour
     public bool IsGuarding => _state ==StateEnum.Guard;
     public StateEnum State => _state; // 現在の状態を外部に公開するためのプロパティ
 
-    [SerializeField] private float lifeMax =10; //ライフ最大値
+    [SerializeField] public float lifeMax =10; //ライフ最大値
     [SerializeField] protected float knockbackResistance = 1f; // この値が高いほど吹っ飛ばされにくい
     [SerializeField] protected int attackPower = 2; //キャラクターの基本攻撃力
+    public int AttackPower => attackPower; //外部から攻撃力を読み取るための窓口
+
+    [SerializeField] protected int expPoint = 20; //倒したときにもらえる経験値
+
+    public int ExpPoint => expPoint; //外部から経験値を読み取るための窓口
 
     
-    public int AttackPower => attackPower; //外部から攻撃力を読み取るための窓口
+    
 
     protected Animator _animator;
     protected StateEnum _state = StateEnum.Normal; //Mob状態
-    private float _life; //現在のライフ値(ヒットポイント)
+    public float _life; //現在のライフ値(ヒットポイント)
     
     
 
@@ -79,9 +91,16 @@ public class MobStatus : MonoBehaviour
         //     damage =0; //攻撃を完全に無効化
         //     return; //ガード中ならダメージを受けない
         // }
+        int finaldamage = (int)Math.Round(damage * UnityEngine.Random.Range(0.85f, 1.15f), MidpointRounding.AwayFromZero);
+        //ダメージにランダムなばらつきを加える
+        Debug.Log($"ダメージを受けた: {damage}, 最終ダメージ: {finaldamage}, 残りライフ: {_life - finaldamage}");
 
-        _life -= damage;
-        //Debug.Log($"ダメージを受けた: {damage}, 残りライフ: {_life}");
+        _life -= finaldamage; 
+        //Debug.Log($"ダメージを受けた: {damage}, 残vりライフ: {_life}");
+
+        //ダメージ量と自分の位置を(transform.position)通知
+        OnDamageTaken?.Invoke(finaldamage, transform.position);
+
 
         //ダメージを受けたことを通知
         OnLifeChanged?.Invoke(_life, lifeMax);

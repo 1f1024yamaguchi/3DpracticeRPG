@@ -10,6 +10,8 @@ public class PlayerEffectManager : MonoBehaviour
     [SerializeField] private ParticleSystem speedBuffParticles; 
     [SerializeField] private ParticleSystem attackBuffParticles;
 
+    [SerializeField] private float multipliter = 1.3f; // スピードアップの倍率
+
     private Coroutine _speedUpCoroutine; // スピードアップのコルーチンを保持
     private Coroutine _attackUpCoroutine; // ★★★ 攻撃力アップ用コルーチンを追加
 
@@ -57,7 +59,7 @@ public class PlayerEffectManager : MonoBehaviour
 
             
             //10秒間、移動速度とジャンプ力を1.5倍にするコルーチンを開始
-                _speedUpCoroutine = StartCoroutine(SpeedUpCoroutine(30f,1.5f));
+                _speedUpCoroutine = StartCoroutine(SpeedUpCoroutine(30f,multipliter));
                 
                 
                 break;
