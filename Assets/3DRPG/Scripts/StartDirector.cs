@@ -27,7 +27,14 @@ public class StartDirector : MonoBehaviour
         // マウス左クリック または ゲームパッドボタン押下でシーン遷移
         if (Input.GetMouseButtonDown(0) || gamepadInput)
         {
-            SceneManager.LoadScene("Main");
+            if (LoadingScreenManager.Instance != null)
+            {
+                LoadingScreenManager.Instance.LoadScene("Main");
+            }
+            else
+            {
+                SceneManager.LoadScene("Main");
+            }
         }
     }
 }

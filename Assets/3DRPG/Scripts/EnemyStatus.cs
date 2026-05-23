@@ -31,6 +31,18 @@ public class EnemyStatus : MobStatus
                 //NavMeshAgentのvelocityで速度のベクトルが取得できる
         //_animator.SetFloat("MoveSpeed" , _agent.velocity.magnitude);
     }
+    //親クラスのTakeDamageをオーバーライドして、ダメージを受けたときに揺れエフェクトを再生するようにする
+
+
+    public override void Damage(int damage)
+    {
+        base.Damage(damage);
+        
+        if(TryGetComponent<DamageShakeDOTween>(out var shakeEffect))
+        {
+            shakeEffect.PlayShakeEffect();
+        }
+    }
 
     protected override void OnDie()
     {
@@ -55,4 +67,6 @@ public class EnemyStatus : MobStatus
         
         Destroy(gameObject);
     }
+
+
 }

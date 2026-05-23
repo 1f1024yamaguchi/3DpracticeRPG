@@ -98,6 +98,8 @@ public class MobStatus : MonoBehaviour
         _life -= finaldamage; 
         //Debug.Log($"ダメージを受けた: {damage}, 残vりライフ: {_life}");
 
+
+
         //ダメージ量と自分の位置を(transform.position)通知
         OnDamageTaken?.Invoke(finaldamage, transform.position);
 

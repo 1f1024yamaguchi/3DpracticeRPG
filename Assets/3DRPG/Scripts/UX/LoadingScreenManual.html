@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ロード画面の仕組み解説</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #16a085;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e8e8e8;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .summary {
+            background-color: #e8f8f5;
+            border-left: 4px solid #1abc9c;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ロード画面の仕組み解説</h1>
+        
+        <p>現在のプロジェクトにおけるロード画面（<code>LoadingScreenManager</code>）の仕組みについて、主要なスクリプト（<code>LoadingScreenManager.cs</code> と <code>change_scene_button.cs</code>）の内容をもとに解説します。</p>
+        
+        <p>全体として<strong>「バックグラウンドで次のシーンを読み込みつつ、最低表示時間を設けてTipsを見せる」</strong>という、最近のゲームでよく使われる丁寧な作りになっています。</p>
+        
+        <p>大きく分けて以下の5つの要素で構成されています。</p>
+
+        <h2>1. シングルトン化とシーン間の維持</h2>
+        <p><code>LoadingScreenManager</code> はゲーム内に1つだけ存在する「シングルトン（Singleton）」として設計されています。</p>
+<pre><code>public static LoadingScreenManager Instance { get; private set; }
+// ...
+DontDestroyOnLoad(gameObject);</code></pre>
+        <p><code>DontDestroyOnLoad</code> を使うことで、シーンが切り替わってもロード画面のUIが破棄されず、画面を跨いでシームレスな表示を維持できるようになっています。</p>
+
+        <h2>2. 非同期読み込み（バックグラウンドロード）</h2>
+        <p>シーンの読み込みには <code>SceneManager.LoadSceneAsync()</code> を使用した<strong>非同期読み込み</strong>を採用しています。<br>
+        通常の方法（<code>LoadScene</code>）だと読み込み中にゲーム画面が完全にフリーズしてしまいますが、非同期読み込みにすることで、ローディング中もアニメーションを動かしたり、進捗（％）を計算して表示したりすることができます。</p>
+
+        <h2>3. コルーチンによる画面遷移の流れ</h2>
+        <p>実際のロード処理は <code>LoadSceneAsyncCoroutine</code> というコルーチン（一定時間ごとに処理を小分けにして実行する仕組み）で以下の順番で実行されます。</p>
+        
+        <ul>
+            <li><strong>フェードイン</strong>:
+                <ul>
+                    <li><code>fadeDuration</code>（設定値、デフォルト0.5秒）かけて、ロード画面の透明度を0から1へアニメーションさせて表示します。</li>
+                    <li>同時に、設定されたTips画像リストからランダムで1枚を選んで表示します。</li>
+                </ul>
+            </li>
+            <li><strong>読み込みループと進捗表示</strong>:
+                <ul>
+                    <li><code>while (!operation.isDone)</code> で読み込みが終わるまでループします。</li>
+                    <li>Unityの仕様上、読み込み進捗は「0.0 ～ 0.9」で完了となるため、これを <code>progress / 0.9f</code> と計算し直し、0%〜100%のパーセンテージテキストとしてUIに表示します。</li>
+                </ul>
+            </li>
+            <li><strong>意図的な待機とシーンアクティブ化</strong>:
+                <ul>
+                    <li><code>operation.allowSceneActivation = false</code> にしておくことで、ロードが裏で完了しても<strong>勝手に次のシーンに切り替わらない</strong>ように止めています。</li>
+                    <li>ここで <code>minLoadingTime</code>（最低ローディング時間、デフォルト2秒）のタイマーをカウントしています。「ロードが一瞬で終わってしまい、Tipsが読めない」という事態を防ぐための工夫です。</li>
+                    <li>ロードが完了（進捗0.9以上）し、かつ最低待機時間を過ぎた瞬間に <code>operation.allowSceneActivation = true</code> にし、次のシーンへ遷移させます。</li>
+                </ul>
+            </li>
+            <li><strong>フェードアウト</strong>:
+                <ul>
+                    <li>シーン遷移完了後、再度 <code>fadeDuration</code> かけて画面を透明にしていき、ロード画面を隠します。</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>4. Tips（ヒント画像）表示のオンオフ機能</h2>
+        <p><code>LoadScene(string sceneName, bool showTips = true)</code> メソッドは、第2引数でTipsの表示/非表示を切り替えられるようになっています。<br>
+        <code>showTips</code> を <code>false</code> にして呼ぶと、Tips画像や%表示が出なくなり、さらに <code>minLoadingTime</code> の待機もスキップされるため、「単に画面を暗転させてサクッとシーン遷移したい場合」にも使い回せる設計になっています。</p>
+
+        <h2>5. ボタンからの呼び出し</h2>
+        <p>ボタン等から呼び出す側（例：<code>change_scene_button.cs</code>）では、以下のようにマネージャーの存在を確認して呼び出しています。</p>
+<pre><code>if (LoadingScreenManager.Instance != null) {
+    LoadingScreenManager.Instance.LoadScene("Main");
+} else {
+    SceneManager.LoadScene("Main"); // フォールバック
+}</code></pre>
+        <p>万が一ロード画面のマネージャーが配置されていないシーンでテストプレイをした場合でも、エラーにならず通常のロード処理が走るように安全対策（フォールバック）がされています。</p>
+
+        <div class="summary">
+            <strong>まとめ：</strong><br>
+            「シングルトンでUIを維持し、コルーチンを使って非同期で裏側でシーンを読み込みながら、その進捗を計算して%表示しつつ、指定秒数は必ず待機してTipsを読ませる」という仕組みで作られています。
+        </div>
+    </div>
+</body>
+</html>

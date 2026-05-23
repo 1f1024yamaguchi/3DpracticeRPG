@@ -34,13 +34,20 @@ public class AudioSetting_Script : MonoBehaviour
         
 
 
-        // 保存された音量を反映
-        BGMvolumeSlider.value = Update_Volume.BGMsliderValue;
-        SEvolumeSlider.value = Update_Volume.SEsliderValue;
+        // PlayerPrefsから保存された音量を読み込み（SoundManagerと同じキーを使用）
+        float savedBGM = PlayerPrefs.GetFloat("BGMVolume", 0.5f);
+        float savedSE  = PlayerPrefs.GetFloat("SEVolume", 0.5f);
 
-        // 音量を適用
-        ChangeVolumeBGM(Update_Volume.BGMsliderValue);
-        ChangeVolumeSE(Update_Volume.SEsliderValue);
+        // 静的変数にも反映
+        Update_Volume.BGMsliderValue = savedBGM;
+        Update_Volume.SEsliderValue  = savedSE;
+
+        // スライダーと音量を適用
+        BGMvolumeSlider.value = savedBGM;
+        SEvolumeSlider.value  = savedSE;
+
+        ChangeVolumeBGM(savedBGM);
+        ChangeVolumeSE(savedSE);
 
          // スライダーの値が変更された時の処理を登録
         BGMvolumeSlider.onValueChanged.AddListener(ChangeVolumeBGM);

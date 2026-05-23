@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class LoadingScreenManager : MonoBehaviour
 {
@@ -11,8 +12,8 @@ public class LoadingScreenManager : MonoBehaviour
     [Header("UI References")]
     [Tooltip("ロード画面全体を囲うオブジェクト(CanvasやPanelなど)")]
     [SerializeField] private GameObject loadingScreenUI;
-    [Tooltip("進捗表示用のスライダー")]
-    [SerializeField] private Slider progressBar;
+    [Tooltip("進捗表示用のテキスト(右下に配置してください)")]
+    [SerializeField] private TextMeshProUGUI progressText;
     [Tooltip("Tips画像を表示するImage")]
     [SerializeField] private Image tipsImage;
 
@@ -23,6 +24,8 @@ public class LoadingScreenManager : MonoBehaviour
     [Header("Settings")]
     [Tooltip("フェードイン・フェードアウトにかかる時間(秒)")]
     [SerializeField] private float fadeDuration = 0.5f;
+    [Tooltip("最低限ローディング画面を表示する時間(秒)。Tipsを読ませるために長めに設定できます。")]
+    [SerializeField] private float minLoadingTime = 2.0f;
     
     private CanvasGroup canvasGroup;
 
@@ -36,6 +39,9 @@ public class LoadingScreenManager : MonoBehaviour
             
             if (loadingScreenUI != null)
             {
+                // シーン遷移時にUIオブジェクトが破棄されるのを防ぐため、このマネージャーの子オブジェクトにする
+                loadingScreenUI.transform.SetParent(transform);
+
                 // CanvasGroupを取得、なければアタッチ
                 canvasGroup = loadingScreenUI.GetComponent<CanvasGroup>();
                 if (canvasGroup == null)
@@ -44,6 +50,10 @@ public class LoadingScreenManager : MonoBehaviour
                 }
                 // 初期状態は非表示にする
                 loadingScreenUI.SetActive(false);
+                if (progressText != null)
+                {
+                    progressText.gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -61,8 +71,10 @@ public class LoadingScreenManager : MonoBehaviour
     /// 指定されたシーン名のシーンを非同期でロードする
     /// </summary>
     /// <param name="sceneName">読み込むシーンの名前</param>
-    public void LoadScene(string sceneName)
+    /// <param name="showTips">Tipsや進捗を表示するかどうか（falseで真っ暗な画面になり、待機もスキップされます）</param>
+    public void LoadScene(string sceneName, bool showTips = true)
     {
+        Debug.Log(sceneName + " へのロードを開始します！"); // これを追加
         if (loadingScreenUI == null)
         {
             Debug.LogError("LoadingScreenUIが設定されていません。通常のシーンロードを実行します。");
@@ -70,26 +82,37 @@ public class LoadingScreenManager : MonoBehaviour
             return;
         }
 
-        StartCoroutine(LoadSceneAsyncCoroutine(sceneName));
+        StartCoroutine(LoadSceneAsyncCoroutine(sceneName, showTips));
     }
 
-    private IEnumerator LoadSceneAsyncCoroutine(string sceneName)
+    private IEnumerator LoadSceneAsyncCoroutine(string sceneName, bool showTips)
     {
         // 1. UIの表示準備
         loadingScreenUI.SetActive(true);
         canvasGroup.alpha = 0f;
 
-        // Tips画像をランダムに設定
-        if (tipsList.Count > 0 && tipsImage != null)
+        if (showTips)
         {
-            int randomIndex = Random.Range(0, tipsList.Count);
-            tipsImage.sprite = tipsList[randomIndex];
-        }
+            // Tips画像をランダムに設定
+            if (tipsList.Count > 0 && tipsImage != null)
+            {
+                int randomIndex = Random.Range(0, tipsList.Count);
+                tipsImage.sprite = tipsList[randomIndex];
+                tipsImage.gameObject.SetActive(true); // 念のためアクティブにする
+            }
 
-        // プログレスバーをリセット
-        if (progressBar != null)
+            // 進捗テキストをリセット
+            if (progressText != null)
+            {
+                progressText.text = "0%";
+                progressText.gameObject.SetActive(true);
+            }
+        }
+        else
         {
-            progressBar.value = 0f;
+            // Tipsと進捗テキストを非表示にする
+            if (tipsImage != null) tipsImage.gameObject.SetActive(false);
+            if (progressText != null) progressText.gameObject.SetActive(false);
         }
 
         // 2. 画面をフェードイン
@@ -109,21 +132,25 @@ public class LoadingScreenManager : MonoBehaviour
         operation.allowSceneActivation = false; 
 
         // 読み込み中の処理
+        float loadTimer = 0f;
+        float currentMinLoadTime = showTips ? minLoadingTime : 0f; // Tips非表示時は待機時間を0にする
+
         while (!operation.isDone)
         {
+            loadTimer += Time.deltaTime;
+
             // Unityの仕様で、progressは0.9でロード完了を意味するため、0〜1に補正する
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
             
-            // プログレスバー（スライダー）の更新
-            if (progressBar != null)
+            if (showTips && progressText != null)
             {
-                progressBar.value = progress;
+                // 進捗テキストの更新
+                progressText.text = Mathf.FloorToInt(progress * 100f).ToString() + "%";
             }
 
-            // progressが0.9以上（=実際のロードがほぼ完了）になったら
-            if (operation.progress >= 0.9f)
+            // progressが0.9以上（=実際のロードがほぼ完了）かつ、最低表示時間が経過したら遷移
+            if (operation.progress >= 0.9f && loadTimer >= currentMinLoadTime)
             {
-                // 少し待ってから（今回はすぐ）シーンをアクティブ化し切り替える
                 operation.allowSceneActivation = true;
             }
 
@@ -142,5 +169,17 @@ public class LoadingScreenManager : MonoBehaviour
         // ロード画面を非表示に戻す
         loadingScreenUI.SetActive(false);
         canvasGroup.alpha = 0f;
+        if (progressText != null)
+        {
+            progressText.gameObject.SetActive(false);
+        }
+
+        
+    }
+
+    public void LoadSceneFromEditor(string sceneName)
+    {
+        //本体のロードシーンを呼び出す
+        LoadScene(sceneName, true);
     }
 }

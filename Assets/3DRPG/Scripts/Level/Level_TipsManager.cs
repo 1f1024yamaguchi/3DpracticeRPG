@@ -9,6 +9,7 @@ public class Level_TipsManager : MonoBehaviour
     [SerializeField] private GameObject tipsPanel; // ヒントパネルのプレハブ
     [SerializeField] private LevelSystem levelSystem; // レベルシステムへの参照
     [SerializeField] private Button button ;    // UIマネージャーへの参照
+    private bool _initialFocusSet = false;
 
 
     private bool _hasShownTips = false; // ヒントを表示したかどうかのフラグ
@@ -43,10 +44,16 @@ public class Level_TipsManager : MonoBehaviour
     {
         if(tipsPanel != null && tipsPanel.activeSelf)
         {
-            if(EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
+            if(!_initialFocusSet && EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
             {
                 EventSystem.current.SetSelectedGameObject(button.gameObject); // ボタンを選択状態にする
+                _initialFocusSet = true; // 初期フォーカスが設定されたことを記録
             }
+
+        }
+        else
+        {
+            _initialFocusSet = false; //パネルが閉じたらリセット
         }
     }
 

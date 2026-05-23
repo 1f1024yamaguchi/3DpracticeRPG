@@ -17,6 +17,13 @@ public class change_scene_button : MonoBehaviour
 
     public void Change_scene_button()
     {
-        SceneManager.LoadScene("Main");
+        if (LoadingScreenManager.Instance != null)
+        {
+            LoadingScreenManager.Instance.LoadScene("Main");
+        }
+        else
+        {
+            SceneManager.LoadScene("Main");
+        }
     }
 }
