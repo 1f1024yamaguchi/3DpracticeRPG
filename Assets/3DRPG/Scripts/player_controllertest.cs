@@ -6,7 +6,7 @@ using TMPro;
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerStatus))]
 [RequireComponent(typeof(MobAttack))]
-public class Re_PlayerController : MonoBehaviour
+public class player_controllertest : MonoBehaviour
 {
     [SerializeField] public float moveSpeed = 3f; 
     [SerializeField] public float jumpPower = 3f; 
@@ -82,26 +82,14 @@ public class Re_PlayerController : MonoBehaviour
         _knockbackVector.y += power / 2; 
     }
 
-    void Update()
+void Update()
     {
-        //もしゲームパッドのUI操作が選択されていたら、それ以外の入力を無視する
-        if(_playerInput.currentActionMap.name == "UI")
-        {
-            animator.SetFloat("MoveSpeed", 0f);
-            // UIが開かれた瞬間にチャージ中だったら、強制的にキャンセル（リセット）する
-            if (_isChargingJump)
-            {
-                _isChargingJump = false;
-                _chargeTimer = 0f;
-                if (chargeText != null) chargeText.text = "0.00";
-                animator.SetBool("IsChargingJump", false); // アニメーションも元に戻す
-            }
-            return;
-        }
-        //もしプレイヤーが動けない状態なら、以降の入力を無視して終了
-        if (!_characterController.enabled) return; 
+        // もしプレイヤーが動けない状態なら終了
+        if (!_characterController.enabled) return;
 
-        // ★【変更箇所】CharacterController標準の接地判定のみを使用
+        // ★【変更箇所1】UIモードかどうかの判定（returnで処理を止めない！）
+        bool isUIMode = (_playerInput.currentActionMap.name == "UI");
+
         bool isGrounded = _characterController.isGrounded;
         if (_status.State == MobStatus.StateEnum.SpecialDash) return;
 
@@ -121,9 +109,15 @@ public class Re_PlayerController : MonoBehaviour
             return; 
         }
         
-        // --- ガード判定 ---
-        bool isGuarding = _guard.IsPressed();
+        // ★【変更箇所2】UIモード中は、プレイヤーの入力を強制的に「押されていない（ゼロ）」にする
+        bool isGuarding       = !isUIMode && _guard.IsPressed();
+        bool isAttackPressed  = !isUIMode && _attack.WasPressedThisFrame();
+        bool isJumpPressed    = !isUIMode && _jump.WasPressedThisFrame();
+        bool isJumpReleased   = !isUIMode && _jump.WasReleasedThisFrame();
+        bool isRunPressed     = !isUIMode && _run.IsPressed();
+        Vector2 moveValue     = isUIMode ? Vector2.zero : _move.ReadValue<Vector2>();
 
+        // --- ガード判定 ---
         if (isGuarding)
         {
             _status.GoToGuardStateIfPossible();
@@ -136,7 +130,7 @@ public class Re_PlayerController : MonoBehaviour
         animator.SetBool("IsGuarding", isGuarding); 
 
         // --- 攻撃処理 ---
-        if (_attack.WasPressedThisFrame())
+        if (isAttackPressed) // ★変更
         {
             _mobAttack.AttackIfPossible();
             _moveVelocity.x = 0f;
@@ -147,9 +141,10 @@ public class Re_PlayerController : MonoBehaviour
         // --- 長押しジャンプのチャージ・発動ロジック ---
         bool shouldExecuteJump = false;
 
-        if (isGrounded && !isGuarding && _status.IsMovable)
+        // ★【変更箇所3】UIモード中もチャージをキャンセルさせるために !isUIMode を追加
+        if (isGrounded && !isGuarding && _status.IsMovable && !isUIMode)
         {
-            if (_jump.WasPressedThisFrame())
+            if (isJumpPressed) // ★変更
             {
                 _isChargingJump = true;
                 _chargeTimer = 0f;
@@ -169,7 +164,7 @@ public class Re_PlayerController : MonoBehaviour
                 {
                     shouldExecuteJump = true;
                 }
-                else if (_jump.WasReleasedThisFrame())
+                else if (isJumpReleased) // ★変更
                 {
                     shouldExecuteJump = true;
                 }
@@ -179,13 +174,14 @@ public class Re_PlayerController : MonoBehaviour
         {
             if (_isChargingJump)
             {
+                // UIを開いた時やガードした時にチャージを安全にリセット
                 _isChargingJump = false;
                 if (chargeText != null) chargeText.text = "0.00"; 
             }
         }
 
         // --- 水平方向の移動（歩き・走り・チャージ中の停止） ---
-        if (_status.IsMovable && !isGuarding && isGrounded) 
+        if (_status.IsMovable && !isGuarding && isGrounded && !isUIMode) // ★ !isUIMode 追加
         {
             if (_isChargingJump)
             {
@@ -194,10 +190,10 @@ public class Re_PlayerController : MonoBehaviour
             }
             else
             {
-                isRunning = _run.IsPressed();      
+                isRunning = isRunPressed; // ★変更
                 float currentSpeed = isRunning ? moveSpeed * 2f : moveSpeed;
 
-                var moveValue = _move.ReadValue<Vector2>(); 
+                // moveValueは上でUIモード時にゼロになるよう対応済み
                 Vector3 forward = cameraTransform.forward;  
                 Vector3 right = cameraTransform.right;      
                 
@@ -215,7 +211,7 @@ public class Re_PlayerController : MonoBehaviour
                 }
             }
         }
-        else if (isGuarding) 
+        else if (isGuarding || isUIMode) // ★ UIモード中もピタッと止める
         {
             _moveVelocity.x = 0f;
             _moveVelocity.z = 0f;
@@ -224,7 +220,6 @@ public class Re_PlayerController : MonoBehaviour
         // --- 垂直方向の処理（重力・ジャンプ実行） ---
         if (isGrounded)
         {
-            //地面にいる間、isGroundedの判定を安定させるための微小な下向きの力
             if (_moveVelocity.y < 0f)
             {
                 _moveVelocity.y = -2f; 
@@ -234,9 +229,8 @@ public class Re_PlayerController : MonoBehaviour
             {
                 _moveVelocity.y = _currentChargedJumpPower; 
 
-                var moveValue = _move.ReadValue<Vector2>();
-                float runMultiplier = _run.IsPressed() ? 1.5f : 1.0f;
-                float forwardForce = moveValue.magnitude * forwardJumpSpeed * runMultiplier;
+                float runMultiplier = isRunPressed ? 1.5f : 1.0f; // ★変更
+                float forwardForce = moveValue.magnitude * forwardJumpSpeed * runMultiplier; // ★変更
 
                 if (moveValue.magnitude > 0.1f)
                 {
@@ -265,7 +259,6 @@ public class Re_PlayerController : MonoBehaviour
         }
         else
         {
-            // 通常の重力加速
             if (_moveVelocity.y > -20f)
             {
                 _moveVelocity.y += Physics.gravity.y * Time.deltaTime;
@@ -276,7 +269,7 @@ public class Re_PlayerController : MonoBehaviour
             }
         }
 
-        // 移動の確定
+        // 移動と重力の確定（※UI中も必ず呼ばれる！）
         _characterController.Move(_moveVelocity * Time.deltaTime);
 
         float moveSpeedValue = new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude;
@@ -284,19 +277,4 @@ public class Re_PlayerController : MonoBehaviour
 
         animator.SetBool("IsChargingJump", _isChargingJump);
     }
-
-    void PlaySlashEffect(int effectIndex)
-    {
-        Transform spawnPoint = (effectSpawnPoint != null) ? effectSpawnPoint : this.transform;
-        GameObject effectInstance = Instantiate(slashEffectPrefabs[effectIndex], spawnPoint.position, spawnPoint.rotation);
-        Destroy(effectInstance, effectDuration);
-    }
-
-    public void PlaySlashEffect_Attack1() => PlaySlashEffect(0);
-    public void PlayeSlashEffect_Attack2() => PlaySlashEffect(1);
-
-    public void AddBaseSpeed(float amount) { moveSpeed += amount; }
-    public void RemoveBaseSpeed(float amount) { moveSpeed -= amount; }
-    public void AddBaseJump(float amount) { jumpPower += amount; }
-    public void RemoveBaseJump(float amount) { jumpPower -= amount; }
 }

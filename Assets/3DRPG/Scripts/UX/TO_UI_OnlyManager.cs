@@ -3,13 +3,7 @@ using UnityEngine.InputSystem;
 
 public class TO_UI_OnlyManager : MonoBehaviour
 {
-    
     public static TO_UI_OnlyManager Instance;
-
-    [Header("Player scripts to disable")]
-    [SerializeField] private MonoBehaviour playerMovement; //移動用スクリプト
-    [SerializeField] private MonoBehaviour playerAttack; //攻撃用スクリプト
-
     private PlayerInput _playerInput;
 
     private void Awake()
@@ -17,65 +11,51 @@ public class TO_UI_OnlyManager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
-            //シーンを跨いでこのオブジェクトを保持する （どこからでもTO_UI_OnlyManagerにアクセス可能）
         }
-
-        // プレイヤーにアタッチされているPlayerInputを取得する
         _playerInput = GetComponent<PlayerInput>();
     }
 
-    //uiのみの操作モードを切り替える 
-    //trueならuiのみ、falseならゲーム復帰
-
-    public void SetUIMode(bool isUIOnly)
+    public void SetUIMode(bool isUIOnly, bool stopTime = true, bool keepPlayerControl = false)
     {
         if(isUIOnly)
         {
-            Time.timeScale = 0f; //ゲーム時間を止める
-            Cursor.visible = true; //マウスカーソルを表示
-            Cursor.lockState = CursorLockMode.None; //カーソル固定解除
+            if (stopTime) Time.timeScale = 0f;
+            
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
 
-            // ★追加：入力をUI操作モードに切り替える（これでボタンが押せるようになる！）
             if (_playerInput != null)
             {
-                _playerInput.SwitchCurrentActionMap("UI");
+                if (keepPlayerControl)
+                {
+                    // ★修正：Switchを使わず、UIマップを「追加で有効化」するだけにする
+                    // （これで移動キーがリセットされず、走り続けられます！）
+                    _playerInput.actions.FindActionMap("UI").Enable();
+                }
+                else
+                {
+                    // ポーズ画面などは今まで通り操作を完全に奪う
+                    _playerInput.SwitchCurrentActionMap("UI"); 
+                }
             }
-
-            //プレイヤーの操作を無効にする
-
-            if(playerMovement != null)
-            {
-                playerMovement.enabled = false; //移動の無効化
-            } 
-            if(playerAttack != null )
-            {
-                playerAttack.enabled = false; //攻撃の無効化
-            } 
         }
         else
         {
-            //ゲームプレイモード
-            Time.timeScale = 1f;
-            Cursor.visible = false; //マウスカーソルを非表示
-            Cursor.lockState = CursorLockMode.Locked; //カーソルを中央固定
+            Time.timeScale = 1f; 
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
 
-            // ★追加：入力をゲーム操作モードに戻す
             if (_playerInput != null)
             {
-                _playerInput.SwitchCurrentActionMap("Player");
-            }
+                // UI操作を無効化し、操作をPlayerに完全に戻す
+                _playerInput.actions.FindActionMap("UI").Disable();
 
-            //プレイヤーの操作を有効に戻す
-            if(playerMovement != null)
-            {
-                playerMovement.enabled = true; //移動の有効化
+                if(_playerInput.currentActionMap.name != "Player")
+                {
+                    _playerInput.SwitchCurrentActionMap("Player");
+                }
+                
             }
-            if(playerAttack != null)
-            {
-                playerAttack.enabled = true; //攻撃の有効化
-            }
-
         }
     }
-
 }

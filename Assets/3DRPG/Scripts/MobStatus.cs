@@ -19,7 +19,9 @@ public class MobStatus : MonoBehaviour
         Attack,//攻撃中
         Die, //死亡
         Guard, //ガード中 
-        Knockback //ノックバック中
+        Knockback, //ノックバック中
+        SpecialDash //変則急襲斬り中
+
 
     }
 
@@ -133,6 +135,16 @@ public class MobStatus : MonoBehaviour
 
         _animator.SetTrigger("Attack");
     }
+    public void GoToSpecialDashStateIfPossible()
+    {
+        if(_state == StateEnum.Normal)
+        {
+            _state = StateEnum.SpecialDash;
+        }
+
+    }
+
+
 
     //可能であればNormalの状態に移行する
     public void GoToNormalStateIfPossible()

@@ -15,42 +15,22 @@ public class Menu : MonoBehaviour
     [SerializeField] private Button itemsButton;
     [SerializeField] private PlayerInput playerInput;
     
-
-    private InputAction _inventoryAction; //Inventoryアクションを保持す変数数
+    private InputAction _inventoryAction; 
     [SerializeField] private string gamepadSchemeName ="Gamepad";
-    //[SerializeField] private GameObject firstItemSlot; //最初に選択するアイテムスロット
 
-
-
-    
-    
-
-    // Start is called before the first frame update
     void Start()
     {
-        pausePanel.SetActive(false); //ポーズのパネルは初期状態では非表示にしておく
+        pausePanel.SetActive(false); 
 
         pauseButton.onClick.AddListener(Pause);
         resumeButton.onClick.AddListener(Resume);
         itemsButton.onClick.AddListener(ToggleItemsDialog);
         
-        //Inventoryという名前のアクションを取得する
         _inventoryAction = playerInput.actions["Inventory"];
-
-        //コントロール変更イベントを登録
-        playerInput.onControlsChanged += OnControlsChanged;
-
-        //UIマップを無効化
-        playerInput.actions.FindActionMap("UI").Disable();
-
-        //ゲーム開始時にコンソール状態を更新
-        UpdateCursorState(); 
-
-
-        //Cursor.visible = false; //マウスカーソル非表示
-        //Cursor.lockState = CursorLockMode.Locked;//カーソルロック
         
-    
+        playerInput.onControlsChanged += OnControlsChanged;
+        playerInput.actions.FindActionMap("UI").Disable();
+        UpdateCursorState(); 
     }
     
     private void OnDestroy()
@@ -68,71 +48,60 @@ public class Menu : MonoBehaviour
 
     void Update()
     {
-        if (_inventoryAction.WasPressedThisFrame())
+        // ★修正：プレイヤーの操作が維持される仕様になったため、
+        // 「開く」のも「閉じる」のもこの一つの処理だけで完璧に動きます！
+        if (_inventoryAction != null && _inventoryAction.WasPressedThisFrame())
         {
+            // ポーズ画面が開いていない時だけ許可
             if (!pausePanel.activeSelf)
             {
                 ToggleItemsDialog();
             }
-            
         }
     }
 
-    //ゲームを一時停止する
     private void Pause()
     {
-        Time.timeScale = 0; //Time.timeScaleで時間の流れの速さを決める。0だと時間が停止する。
         pausePanel.SetActive(true);
-
-        playerInput.SwitchCurrentActionMap("UI");
         EventSystem.current.SetSelectedGameObject(resumeButton.gameObject);
 
-        UpdateCursorState();
-
+        if (TO_UI_OnlyManager.Instance != null)
+        {
+            TO_UI_OnlyManager.Instance.SetUIMode(true, true, false); 
+        }
     }
-    //ゲームを再開する
+
     private void Resume()
     {
-        Time.timeScale = 1;
         pausePanel.SetActive(false);
 
-        playerInput.SwitchCurrentActionMap("Player");
-        UpdateCursorState();
-
-        
+        if (TO_UI_OnlyManager.Instance != null)
+        {
+            TO_UI_OnlyManager.Instance.SetUIMode(false);
+        }
     }
 
-    
     private void ToggleItemsDialog()
     {
         itemsDialog.Toggle();
 
-        if(itemsDialog.gameObject.activeSelf) //アイテムが開いている
+        if(itemsDialog.gameObject.activeSelf) 
         {
-            //UIマップを有効にする
-            playerInput.actions.FindActionMap("UI").Enable();
-
-            // // 最初のアイテムを選択状態にする
-            // if (firstItemSlot != null)
-            // {
-            //     EventSystem.current.SetSelectedGameObject(null);
-            //     EventSystem.current.SetSelectedGameObject(firstItemSlot);
-            // }
-             
-
-            
+            if (TO_UI_OnlyManager.Instance != null) 
+            {
+                // インベントリは時間止めない(false)、プレイヤー操作残す(true)
+                TO_UI_OnlyManager.Instance.SetUIMode(true, false, true);
+            }
         }
         else
         {
-            //UIマップのみ無効化
-            playerInput.actions.FindActionMap("UI").Disable();
+            if (TO_UI_OnlyManager.Instance != null)
+            {
+                TO_UI_OnlyManager.Instance.SetUIMode(false);
+            } 
         }
-
-        //どちらの場合もカーソル状態を更新
-        UpdateCursorState();        
     }
 
-    //カーソルの表示・非表示を更新
     private void UpdateCursorState()
     {
         bool isUiOpen = itemsDialog.gameObject.activeSelf || pausePanel.activeSelf;
@@ -140,30 +109,21 @@ public class Menu : MonoBehaviour
 
         if (isUiOpen)
         {
-
             if (isGamepad)
             {
-                //UIが開き、かつゲームパッド使用中はカーソル非表示
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-
             }
             else
             {
-                // UIが開き、かつキーボードマウス使用中 -> カーソル表示
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-
-
             }
-
         }
-
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
     }
-    
 }
