@@ -43,6 +43,9 @@ namespace UI
         [Tooltip("False の場合、決定キーを押しても OnSubmit を実行しません（項目は選択可能なまま）")]
         public bool isPermitted = true;
 
+        [Tooltip("Carousel項目用のページデータ")]
+        public List<UI.MultiMedia.MediaPageData> mediaPages;
+
         // ── イベント ────────────────────────────────────────────────
         // [Header("Events")]
         public UnityEvent OnSubmit;
@@ -144,6 +147,9 @@ namespace UI
 
                 // ── 許可フラグ ────────────────────────────────────────
                 newItem.isPermitted = data.isPermitted;
+
+                // ── カルーセル用データ ────────────────────────────────────
+                newItem.mediaPages = data.mediaPages;
 
                 newItem.RefreshUI();
                 _generatedItems.Add(newItem);

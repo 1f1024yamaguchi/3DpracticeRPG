@@ -12,6 +12,16 @@ public class MobStatus : MonoBehaviour
     //ダメージを受けた時に数字と場所を表記する。
     public event Action<int, Vector3> OnDamageTaken;
 
+    protected void TriggerLifeChanged(float currentLife, float maxLife)
+    {
+        OnLifeChanged?.Invoke(currentLife, maxLife);
+    }
+
+    protected void TriggerDamageTaken(int damage, Vector3 pos)
+    {
+        OnDamageTaken?.Invoke(damage, pos);
+    }
+
     public enum StateEnum
     {
 
@@ -70,7 +80,7 @@ public class MobStatus : MonoBehaviour
         
 
         //ゲーム開始時にhp情報を通知
-        OnLifeChanged?.Invoke(_life, lifeMax);     
+        TriggerLifeChanged(_life, lifeMax);     
     }
 
     //キャラクターが倒れた時の処理を記述する
@@ -103,11 +113,11 @@ public class MobStatus : MonoBehaviour
 
 
         //ダメージ量と自分の位置を(transform.position)通知
-        OnDamageTaken?.Invoke(finaldamage, transform.position);
+        TriggerDamageTaken(finaldamage, transform.position);
 
 
         //ダメージを受けたことを通知
-        OnLifeChanged?.Invoke(_life, lifeMax);
+        TriggerLifeChanged(_life, lifeMax);
 
 
         if (_life > 0) return;
@@ -194,7 +204,7 @@ public class MobStatus : MonoBehaviour
         //最大HPは越えない
         _life = Mathf.Min(_life, lifeMax);
 
-        OnLifeChanged?.Invoke(_life, lifeMax);
+        TriggerLifeChanged(_life, lifeMax);
     }
 
 

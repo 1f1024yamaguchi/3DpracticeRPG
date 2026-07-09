@@ -55,6 +55,11 @@ ExportedObj/
 # Unity3D generated file on crash reports
 sysinfo.txt
 
+# Audio files (個人開発ではGitHubに送らない)
+*.mp3
+*.wav
+*.ogg
+
 # Builds
 *.apk
 *.aab
@@ -90,3 +95,7 @@ Assets/3DRPG/Font/NotoSansJP-Medium SDF2.asset
 Assets/3DRPG/Font/NotoSansJP-Medium.ttf.meta
 Assets/3DRPG/movie/toproadでも画面_1.mp4
 Assets/3DRPG/movie/toproadでも画面_1.mp4.meta
+
+# 100MB超でGitHubにpushできないため除外
+Assets/ALP_Assets/Realistic Terrain Textures Lite/Scenes/TerrainDATA/Terrain.asset
+Assets/ALP_Assets/Realistic Terrain Textures Lite/Textures/Ground001_N.png

@@ -15,7 +15,7 @@ public class PlayerEffectManager : MonoBehaviour
     private Coroutine _speedUpCoroutine; // スピードアップのコルーチンを保持
     private Coroutine _attackUpCoroutine; // ★★★ 攻撃力アップ用コルーチンを追加
 
-    private PlayerController _playerController;
+    private Re_PlayerController _playerController;
     private MobStatus _mobStatus;
     private float baseSpeed;
     private float baseJump;
@@ -29,7 +29,7 @@ public class PlayerEffectManager : MonoBehaviour
         
 
         
-        _playerController = GetComponent<PlayerController>();
+        _playerController = GetComponent<Re_PlayerController>();
         _mobStatus = GetComponent<MobStatus>();
         baseSpeed = _playerController.moveSpeed;
         baseJump = _playerController.jumpPower;
@@ -78,7 +78,7 @@ public class PlayerEffectManager : MonoBehaviour
 
             case Item.ItemType.Heal_Potion:
 
-                _mobStatus.Heal(25);
+                _playerStatus.HealPercent(30);
                 PlaySound(healSound);
                 break;
 

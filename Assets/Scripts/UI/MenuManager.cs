@@ -58,6 +58,10 @@ namespace UI
             if (_menuStack.Count > 0)
             {
                 var current = _menuStack.Peek();
+                
+                // 二重登録（同じメニューを連続で開く）を防止
+                if (current.MenuObject == newMenu) return;
+
                 if (current.MenuObject != null)
                 {
                     MarkRetainedFocus(currentFocus, retain: true);

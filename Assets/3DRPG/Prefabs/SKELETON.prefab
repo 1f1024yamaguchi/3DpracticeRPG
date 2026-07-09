@@ -1160,9 +1160,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5962989f93e03f438f52c8061f7c00a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCooldown: 0.5
+  attackCooldown: 1
   attackCollider: {fileID: 4643210236690821206}
-  attackKnockbackPower: 2
+  attackKnockbackPower: 1.5
 --- !u!136 &5386949420767810153
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -31,6 +31,7 @@ namespace UI.Editor
                 SerializedProperty maxValue = property.FindPropertyRelative("maxValue");
                 SerializedProperty selectorOptions = property.FindPropertyRelative("selectorOptions");
                 SerializedProperty playerPrefsKey = property.FindPropertyRelative("playerPrefsKey");
+                SerializedProperty mediaPages = property.FindPropertyRelative("mediaPages");
 
                 SerializedProperty onSubmit = property.FindPropertyRelative("OnSubmit");
                 SerializedProperty onValueChanged = property.FindPropertyRelative("OnValueChanged");
@@ -89,6 +90,15 @@ namespace UI.Editor
                         fieldRect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
                         EditorGUI.PropertyField(fieldRect, initialValue, new GUIContent("Initial Value (0=OFF, 1=ON)"));
                     }
+                    else if (t == GenericMenuItem.ItemType.Carousel)
+                    {
+                        fieldRect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+                        float pagesHeight = EditorGUI.GetPropertyHeight(mediaPages, true);
+                        fieldRect.height = pagesHeight;
+                        EditorGUI.PropertyField(fieldRect, mediaPages, true);
+                        fieldRect.height = EditorGUIUtility.singleLineHeight;
+                        fieldRect.y += pagesHeight - EditorGUIUtility.singleLineHeight;
+                    }
                 }
 
                 fieldRect.y += EditorGUIUtility.singleLineHeight + (EditorGUIUtility.standardVerticalSpacing * 3);
@@ -145,6 +155,11 @@ namespace UI.Editor
                 else if (t == GenericMenuItem.ItemType.Toggle)
                 {
                     height += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+                }
+                else if (t == GenericMenuItem.ItemType.Carousel)
+                {
+                    height += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+                    height += EditorGUI.GetPropertyHeight(property.FindPropertyRelative("mediaPages"), true) + EditorGUIUtility.standardVerticalSpacing;
                 }
             }
 

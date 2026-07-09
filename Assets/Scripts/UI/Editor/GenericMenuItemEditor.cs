@@ -15,6 +15,7 @@ namespace UI.Editor
         private SerializedProperty commandInputText;
         private SerializedProperty previewVideo;
         private SerializedProperty targetSubMenu;
+        private SerializedProperty showSubMenuAsPreview;
         
         private SerializedProperty disabledTextColor;
         private SerializedProperty disabledSelectedTextColor;
@@ -33,6 +34,7 @@ namespace UI.Editor
         private SerializedProperty inputCooldown;
         private SerializedProperty isPermitted;
         private SerializedProperty playerPrefsKey;
+        private SerializedProperty mediaPages;
 
         protected override void OnEnable()
         {
@@ -44,6 +46,7 @@ namespace UI.Editor
             commandInputText = serializedObject.FindProperty("commandInputText");
             previewVideo = serializedObject.FindProperty("previewVideo");
             targetSubMenu = serializedObject.FindProperty("targetSubMenu");
+            showSubMenuAsPreview = serializedObject.FindProperty("showSubMenuAsPreview");
             
             disabledTextColor = serializedObject.FindProperty("disabledTextColor");
             disabledSelectedTextColor = serializedObject.FindProperty("disabledSelectedTextColor");
@@ -62,6 +65,7 @@ namespace UI.Editor
             inputCooldown = serializedObject.FindProperty("inputCooldown");
             isPermitted   = serializedObject.FindProperty("isPermitted");
             playerPrefsKey = serializedObject.FindProperty("playerPrefsKey");
+            mediaPages = serializedObject.FindProperty("mediaPages");
         }
 
         public override void OnInspectorGUI()
@@ -77,6 +81,7 @@ namespace UI.Editor
             EditorGUILayout.PropertyField(commandInputText);
             EditorGUILayout.PropertyField(previewVideo);
             EditorGUILayout.PropertyField(targetSubMenu);
+            EditorGUILayout.PropertyField(showSubMenuAsPreview);
             EditorGUILayout.PropertyField(isPermitted);
 
             EditorGUILayout.Space();
@@ -123,6 +128,10 @@ namespace UI.Editor
                 else if (type == GenericMenuItem.ItemType.Toggle)
                 {
                     EditorGUILayout.PropertyField(currentValue);
+                }
+                else if (type == GenericMenuItem.ItemType.Carousel)
+                {
+                    EditorGUILayout.PropertyField(mediaPages, true);
                 }
             }
 

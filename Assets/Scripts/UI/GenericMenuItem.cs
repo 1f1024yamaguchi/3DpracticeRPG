@@ -11,7 +11,7 @@ namespace UI
     [RequireComponent(typeof(RectTransform))]
     public class GenericMenuItem : Selectable, ISubmitHandler, IPointerClickHandler, ISelectHandler
     {
-        public enum ItemType { Button, Slider, Toggle, Selector }
+        public enum ItemType { Button, Slider, Toggle, Selector, Carousel }
 
         [Header("Item Config")]
         public ItemType itemType = ItemType.Button;
@@ -20,6 +20,8 @@ namespace UI
         public string commandInputText = "";
         public VideoClip previewVideo;
         public GameObject targetSubMenu;
+        [Tooltip("選択時にサブメニューをプレビュー表示するかどうか。チェックを外すと決定を押すまでサブメニューが表示されません。")]
+        public bool showSubMenuAsPreview = true;
 
         [Header("UI References")]
         [SerializeField] private TextMeshProUGUI _labelTMPro;
@@ -43,6 +45,9 @@ namespace UI
         public string playerPrefsKey;
 
         public bool isPermitted = true;
+
+        [Header("Carousel Data")]
+        public System.Collections.Generic.List<UI.MultiMedia.MediaPageData> mediaPages;
 
         [Header("Input Settings")]
         [SerializeField] private float inputCooldown = 0.2f;
@@ -137,8 +142,18 @@ namespace UI
                 
                 _menuManager.UpdatePreviewVideo(previewVideo);
 
-                if (targetSubMenu != null)
+                if (targetSubMenu != null && showSubMenuAsPreview)
                     _menuManager.ShowPreview(targetSubMenu);
+            }
+
+            // Carouselプレビュー処理
+            if (itemType == ItemType.Carousel && targetSubMenu != null && mediaPages != null && mediaPages.Count > 0 && showSubMenuAsPreview)
+            {
+                var carouselController = targetSubMenu.GetComponent<UI.MultiMedia.CarouselMenuController>();
+                if (carouselController != null)
+                {
+                    carouselController.ShowPreview(labelText, mediaPages[0]);
+                }
             }
         }
 
@@ -150,8 +165,18 @@ namespace UI
             {
                 _menuManager.ClearDescription();
                 _menuManager.ClearPreviewVideo();
-                if (targetSubMenu != null)
+                if (targetSubMenu != null && showSubMenuAsPreview)
                     _menuManager.HidePreview(targetSubMenu);
+            }
+
+            // Carouselプレビュークリア処理
+            if (itemType == ItemType.Carousel && targetSubMenu != null && !_isRetainedFocus && showSubMenuAsPreview)
+            {
+                var carouselController = targetSubMenu.GetComponent<UI.MultiMedia.CarouselMenuController>();
+                if (carouselController != null)
+                {
+                    carouselController.ClearPreview();
+                }
             }
         }
 
@@ -165,6 +190,14 @@ namespace UI
             // }
 
             if (itemType == ItemType.Toggle) ToggleValue();
+            else if (itemType == ItemType.Carousel && targetSubMenu != null)
+            {
+                var carouselController = targetSubMenu.GetComponent<UI.MultiMedia.CarouselMenuController>();
+                if (carouselController != null)
+                {
+                    carouselController.Initialize(labelText, mediaPages);
+                }
+            }
 
             OnSubmitEvent?.Invoke();
 

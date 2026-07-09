@@ -6,7 +6,7 @@ public class GroundDustController : MonoBehaviour
 
     private CharacterController characterController;
 
-    private PlayerController playerController;
+    private Re_PlayerController _playerController;
 
     private ParticleSystem.EmissionModule emissionModule;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -14,7 +14,7 @@ public class GroundDustController : MonoBehaviour
     {
         characterController = GetComponentInParent<CharacterController>();
 
-        playerController = GetComponentInParent<PlayerController>();
+        _playerController = GetComponent<Re_PlayerController>();
         if (DustParticles != null)
         {
             emissionModule = DustParticles.emission;
@@ -33,7 +33,7 @@ public class GroundDustController : MonoBehaviour
         }
 
         bool isGrounded = characterController.isGrounded;
-        bool isRunning = playerController.isRunning;
+        bool isRunning = _playerController.isRunning;
 
         if (isGrounded && isRunning)
         {

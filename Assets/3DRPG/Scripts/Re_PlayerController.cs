@@ -46,6 +46,7 @@ public class Re_PlayerController : MonoBehaviour
     private PlayerInput _playerInput; 
 
     public AudioClip sound1;
+    public AudioClip jumpSound; // ジャンプ用のSEを追加
     AudioSource audioSource;
 
     public bool isRunning { get; private set; }
@@ -55,6 +56,9 @@ public class Re_PlayerController : MonoBehaviour
     private float _chargeTimer = 0f;
     private bool _isChargingJump = false;
 
+    public bool IsChargingJump => _isChargingJump;
+
+    public float ChargeRatio => Mathf.Clamp01(_chargeTimer / chargeMaxTime);
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
@@ -79,7 +83,10 @@ public class Re_PlayerController : MonoBehaviour
     public void ApplyKnockback(Vector3 direction, float power)
     {
         _knockbackVector = direction * power;
-        _knockbackVector.y += power / 2; 
+         
+
+
+
     }
 
     void Update()
@@ -107,15 +114,28 @@ public class Re_PlayerController : MonoBehaviour
 
         isRunning = false;
 
-        // --- すっ飛ばし処理 ---
+// --- ぶっ飛ばし処理 ---
         if (_status.State == MobStatus.StateEnum.Knockback)
         {
-            _knockbackVector = Vector3.Lerp(_knockbackVector, Vector3.zero, _knockbackDrag * Time.deltaTime);
-            _knockbackVector.y += Physics.gravity.y * Time.deltaTime;
+            // 変更点1: XとZ（水平方向）だけをLerpで減衰させ、Y（上下）はLerpに巻き込まない
+            _knockbackVector.x = Mathf.Lerp(_knockbackVector.x, 0, _knockbackDrag * Time.deltaTime);
+            _knockbackVector.z = Mathf.Lerp(_knockbackVector.z, 0, _knockbackDrag * Time.deltaTime);
+            
+            // Y軸は純粋に重力だけを加算して、自然な放物線を描かせる
+            _knockbackVector.y += (Physics.gravity.y * Time.deltaTime);
+
             _characterController.Move(_knockbackVector * Time.deltaTime);
 
-            if(_knockbackVector.magnitude < 2f)
+            // 水平方向の速度だけを計算
+            Vector2 horizontalVelocity = new Vector2(_knockbackVector.x, _knockbackVector.z);
+
+            // 変更点2: 水平の勢いが落ちて通常状態に戻る際、現在の落下速度などを _moveVelocity に引き継ぐ
+            if(horizontalVelocity.magnitude < 2f)
             {
+                // 空中でノックバックが解除されても不自然に止まらないよう、慣性をパスする
+                _moveVelocity = _knockbackVector; 
+                
+                _knockbackVector = Vector3.zero;
                 _status.GoToNormalStateIfPossible();
             }
             return; 
@@ -257,6 +277,12 @@ public class Re_PlayerController : MonoBehaviour
                 animator.SetBool("IsJumping", true); 
                 _isChargingJump = false; 
                 if (chargeText != null) chargeText.text = "0.00"; 
+                
+                // ジャンプ時にSEを再生
+                if (jumpSound != null)
+                {
+                    audioSource.PlayOneShot(jumpSound);
+                }
             }
             else
             {
@@ -279,7 +305,16 @@ public class Re_PlayerController : MonoBehaviour
         // 移動の確定
         _characterController.Move(_moveVelocity * Time.deltaTime);
 
-        float moveSpeedValue = new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude;
+        // チャージ中は MoveSpeed を確実に0にして Walk 遷移を防ぐ
+        float moveSpeedValue;
+        if (_isChargingJump)
+        {
+            moveSpeedValue = 0f;
+        }
+        else
+        {
+            moveSpeedValue = new Vector3(_moveVelocity.x, 0, _moveVelocity.z).magnitude;
+        }
         animator.SetFloat("MoveSpeed", moveSpeedValue);
 
         animator.SetBool("IsChargingJump", _isChargingJump);

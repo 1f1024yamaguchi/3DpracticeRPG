@@ -54,18 +54,36 @@ public class EnemyStatus : MobStatus
     private IEnumerator DestroyCoroutine()
     {
         //playerオブジェクトからLevelSystemコンポーネントを取得して経験値を加算する
+        // FindGameObjectWithTag は子・孫オブジェクト(例: Tunic)を返すことがあるため
+        // GetComponentInParent で親方向を辿って LevelSystem を取得する
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log($"[EXP] player found: {player!= null}");
+        Debug.Log($"[EXP] player name: {player?.name}, path: {(player != null ? GetFullPath(player.transform) : "N/A")}");
+        Debug.Log($"[EXP] lv found: {player.GetComponent<LevelSystem>()!= null}");
         if (player != null)
         {
-            LevelSystem lv = player.GetComponent<LevelSystem>();
+            //LevelSystem lv = player.GetComponent<LevelSystem>();
+            LevelSystem lv = player.GetComponentInParent<LevelSystem>();
             if (lv != null)
             {
+                Debug.Log($"[EXP] add {expPoint}");
                 lv.AddExp(expPoint); // MobStatusで設定した経験値を送る
+            }
+            else
+            {
+                Debug.LogWarning($"[EXP] LevelSystem not found. player path: {GetFullPath(player.transform)}");
             }
         }
         yield return new WaitForSeconds(3);
         
         Destroy(gameObject);
+    }
+
+    private string GetFullPath(Transform t)
+    {
+        string path = t.name;
+        while (t.parent != null) { t = t.parent; path = t.name + "/" + path; }
+        return path;
     }
 
 
