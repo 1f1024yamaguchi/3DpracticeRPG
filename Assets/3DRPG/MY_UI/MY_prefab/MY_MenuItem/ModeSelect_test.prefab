@@ -149,8 +149,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -477,8 +477,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -711,6 +711,7 @@ MonoBehaviour:
   commandInputText: 
   previewVideo: {fileID: 0}
   targetSubMenu: {fileID: 0}
+  showSubMenuAsPreview: 1
   _labelTMPro: {fileID: 8929583031336551289}
   _valueTMPro: {fileID: 1936751343301003702}
   _commandInputTMPro: {fileID: 0}
@@ -732,4 +733,4 @@ MonoBehaviour:
   inputCooldown: 0.2
   disabledTextColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5176471}
   disabledSelectedTextColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  normalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  normalTextColor: {r: 0, g: 0, b: 0, a: 1}

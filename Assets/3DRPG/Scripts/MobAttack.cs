@@ -9,8 +9,11 @@ public class MobAttack : MonoBehaviour
     [SerializeField] private float attackCooldown = 1.0f; //攻撃後のクールダウン（秒）
     [SerializeField] private Collider attackCollider;
     [SerializeField] private float attackKnockbackPower = 1.5f; //この攻撃のノックバック倍率
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip HitSound;
 
     private MobStatus _status;
+
 
     private void Start()
     {
@@ -90,6 +93,7 @@ public class MobAttack : MonoBehaviour
 
             int attackerPower = _status.AttackPower;
             targetMob.Damage(attackerPower);
+            audioSource.PlayOneShot(HitSound);
         }
 
 

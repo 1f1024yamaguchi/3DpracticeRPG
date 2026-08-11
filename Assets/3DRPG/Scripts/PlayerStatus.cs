@@ -156,6 +156,34 @@ public class PlayerStatus : MobStatus
 
 
 
+    /// <summary>
+    /// セーブデータからダメージ％を復元する（AutoSaveManager用）。
+    /// UIにも即時反映させる。
+    /// </summary>
+    public void RestoreDamagePercent(float percent)
+    {
+        DamagePercent = Mathf.Max(0f, percent);
+        TriggerLifeChanged(DamagePercent, 999f);
+    }
+
+    /// <summary>基礎攻撃力（ステータス割り振り後の値）。AutoSaveManagerの保存用。</summary>
+    public int BaseAttackPower => _originalAttackPower;
+
+    /// <summary>最大HP（ステータス割り振り後の値）。AutoSaveManagerの保存用。</summary>
+    public float MaxLife => lifeMax;
+
+    /// <summary>
+    /// セーブデータからステータス割り振り（攻撃力・最大HP）を復元する。
+    /// 速度・ジャンプは Re_PlayerController の値を AutoSaveManager が直接復元する。
+    /// </summary>
+    public void RestoreStats(int baseAttackPower, float maxLife)
+    {
+        _originalAttackPower = Mathf.Max(1, baseAttackPower);
+        attackPower = _originalAttackPower;
+        lifeMax = Mathf.Max(1f, maxLife);
+        TriggerLifeChanged(DamagePercent, 999f);
+    }
+
     public void HealPercent(int amount)
     {
         if (_state == StateEnum.Die) return;

@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace UI.MultiMedia
 {
+    // ─────────────────────────────────────────────────────────────────────────
+    // MultiMediaGenerator の Inspector に「生成」「クリア」ボタンを追加する
+    // Editor 拡張。ボタン押下後は SetDirty で変更をシーンに保存対象として
+    // マークします。
+    // ─────────────────────────────────────────────────────────────────────────
     [CustomEditor(typeof(MultiMediaGenerator))]
     public class MultiMediaGeneratorEditor : UnityEditor.Editor
     {

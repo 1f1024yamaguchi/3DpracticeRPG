@@ -16,6 +16,12 @@ namespace UI.MultiMedia
     /// MultiMediaContentを自動生成するクラス。
     /// インスペクターで設定したリストに基づいて、子オブジェクトとして項目を生成する。
     /// 生成された項目間で上下のナビゲーションリンクを設定します。
+    ///
+    /// AutoMenuGenerator との違い:
+    ///   ・こちらはギャラリー専用シーン向け（MenuManager を使わない）
+    ///   ・Bボタンで前のシーンへ戻るシーン遷移処理を内蔵
+    ///   ・ページインジケータ（●○）を Generator 側で一括生成する
+    /// 使い方は Inspector の「Generate Menu」ボタンで Editor 生成 → シーン保存。
     /// </summary>
     public class MultiMediaGenerator : MonoBehaviour
     {
@@ -64,6 +70,10 @@ namespace UI.MultiMedia
             }
         }
 
+        /// <summary>
+        /// Bボタン（キャンセル）で前のシーンへフェード遷移します。
+        /// 前のシーン名が記録されていなければ cancelTargetScene へ戻ります。
+        /// </summary>
         private void Update()
         {
             if (InputManager.Instance != null && InputManager.Instance.ButtonBDown)
@@ -103,6 +113,8 @@ namespace UI.MultiMedia
         }
 
         /// <summary>
+        /// items の定義に従って項目を生成し、ナビゲーションリンクと
+        /// ページインジケータ（最大ページ数分）を設定します。
         /// インスペクターの右クリックメニュー、またはボタン（Editor拡張が必要）から実行可能
         /// </summary>
         [ContextMenu("Generate Menu")]
@@ -143,6 +155,12 @@ namespace UI.MultiMedia
             GeneratePageIndicators(maxPageCount);
         }
 
+        /// <summary>
+        /// インジケータの表示を更新します。
+        /// itemCount = 現在の項目のページ総数（それ以外のインジケータは非表示）、
+        /// currentIndex = 現在のページ（アクティブ表示にする）。
+        /// MultiMediaContent.OnIndicatorUpdate から呼ばれます。
+        /// </summary>
         public void UpdateIndicator(int itemCount, int currentIndex)
         {
             if (_generatedPageIndicators == null) return;
@@ -167,6 +185,10 @@ namespace UI.MultiMedia
             }
         }
 
+        /// <summary>
+        /// 全項目中の最大ページ数分のインジケータを生成します。
+        /// （項目ごとのページ数の差は UpdateIndicator の表示/非表示で吸収）
+        /// </summary>
         private void GeneratePageIndicators(int maxPageCount)
         {
             if (horizontalLayoutGroupObj == null || activeSprite == null || inactiveSprite == null) return;
@@ -184,6 +206,9 @@ namespace UI.MultiMedia
             }
         }
 
+        /// <summary>
+        /// 生成された項目間で循環する上下ナビゲーションリンクを設定します。
+        /// </summary>
         private void LinkNavigation()
         {
             int count = _generatedItems.Count;
@@ -201,6 +226,10 @@ namespace UI.MultiMedia
             }
         }
 
+        /// <summary>
+        /// 生成済みの項目とインジケータをすべて削除します。
+        /// Playモード・Editorモード両対応。Editor時はコンテナ配下も掃除します。
+        /// </summary>
         [ContextMenu("Clear Menu")]
         public void ClearMenu()
         {

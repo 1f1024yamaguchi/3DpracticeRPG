@@ -4,6 +4,12 @@ using UI;
 
 namespace UI.Editor
 {
+    // ─────────────────────────────────────────────────────────────────────────
+    // AutoMenuGenerator の menuItems リストに表示される MenuEntryData の
+    // 描画方法を定義する PropertyDrawer。
+    // 折りたたみ（Foldout）付きで、選択した ItemType に応じて
+    // 必要な設定項目だけを表示します（GenericMenuItemEditor と同じ方針）。
+    // ─────────────────────────────────────────────────────────────────────────
     [CustomPropertyDrawer(typeof(MenuEntryData))]
     public class MenuEntryDataDrawer : PropertyDrawer
     {

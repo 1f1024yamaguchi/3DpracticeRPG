@@ -10,6 +10,11 @@ namespace UI.MultiMedia
     /// <summary>
     /// メディアの表示（Text, Image, Video）を管理するコンポーネント。
     /// 指定されたMediaPageDataに基づいてUIを更新する。
+    ///
+    /// 呼び出し元は CarouselMenuController / MultiMediaContent で、
+    /// このクラス自体は入力を一切扱わず「表示専門」です（Presenterパターン）。
+    /// 動画は Prepare() → prepareCompleted → Play() の順で再生することで、
+    /// ロード中に前の映像（残像）が見えるのを防ぎ、フェードインさせています。
     /// </summary>
     public class MultiMediaPresenter : MonoBehaviour
     {
@@ -26,6 +31,11 @@ namespace UI.MultiMedia
         private string currentMediaId; // 現在のロード対象を記録
         private Coroutine videoFadeCoroutine;
 
+        /// <summary>
+        /// 1ページ分のデータを画面に表示します。
+        /// itemName はタイトル欄、data.description は説明欄に反映され、
+        /// mediaType に応じて画像または動画の表示に切り替わります。
+        /// </summary>
         public void DisplayPage(string itemName, MediaPageData data)
         {
             if (data == null)
@@ -50,6 +60,10 @@ namespace UI.MultiMedia
             UpdateMediaDisplay(data);
         }
 
+        /// <summary>
+        /// メディア表示の切り替え本体。
+        /// いったん画像・動画を両方非表示/停止してから、必要なものだけ表示します。
+        /// </summary>
         private void UpdateMediaDisplay(MediaPageData data)
         {
             if (videoFadeCoroutine != null)
@@ -135,6 +149,9 @@ namespace UI.MultiMedia
             vp.Play();
         }
 
+        /// <summary>
+        /// 動画表示用 RawImage の透明度を 0→1 に上げてフェードインさせます。
+        /// </summary>
         private IEnumerator FadeVideoIn()
         {
             float timer = 0f;
@@ -155,6 +172,9 @@ namespace UI.MultiMedia
             videoFadeCoroutine = null;
         }
 
+        /// <summary>
+        /// テキスト・画像・動画の表示をすべて消去し、再生を停止します。
+        /// </summary>
         public void ClearAll()
         {
             if (videoFadeCoroutine != null)

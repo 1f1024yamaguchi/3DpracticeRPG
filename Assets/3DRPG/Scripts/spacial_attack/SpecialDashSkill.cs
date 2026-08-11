@@ -39,8 +39,13 @@ public class SpecialDashSkill : MonoBehaviour
 
     void OnDestroy()
     {
-        _testFireAction.Disable();
-        _testFireAction.Dispose();
+        // Start() 前に破棄される場合があるため null ガード
+        if (_testFireAction != null)
+        {
+            _testFireAction.Disable();
+            _testFireAction.Dispose();
+            _testFireAction = null;
+        }
     }
 
     void Update()

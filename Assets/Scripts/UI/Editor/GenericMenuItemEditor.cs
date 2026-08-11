@@ -5,6 +5,12 @@ using UI; // namespace of GenericMenuItem
 
 namespace UI.Editor
 {
+    // ─────────────────────────────────────────────────────────────────────────
+    // GenericMenuItem の Inspector 表示をカスタマイズする Editor 拡張。
+    // itemType（Button/Slider/Toggle/Selector/Carousel）に応じて、
+    // その種類に必要なフィールドだけを表示します。
+    // 例: Slider選択時のみ min/max を表示、Carousel選択時のみ mediaPages を表示。
+    // ─────────────────────────────────────────────────────────────────────────
     [CustomEditor(typeof(GenericMenuItem))]
     [CanEditMultipleObjects]
     public class GenericMenuItemEditor : SelectableEditor

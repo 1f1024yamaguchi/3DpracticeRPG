@@ -36,10 +36,10 @@ public class LevelSystem : MonoBehaviour
 
     private void Awake()
     {
-        
+        // 進行度の永続化は AutoSaveManager に一元化した。
+        // ここではセーブが無い場合(＝初めから)のための初期値のみ設定し、保存はしない。
+        // セーブがある場合は、この後 AutoSaveManager.RestoreProgress() が上書きする。
         InitializeNewGame();
-        //LoadData(); // 起動時に保存データを読み込む
-        SaveData(); //初期状態を保存
         Debug.Log($"初期化{Level},{CurrentExp},{ExpToNextLevel},{SkillPoints}" );
     }
 
@@ -121,22 +121,31 @@ public class LevelSystem : MonoBehaviour
         return false;
     }
 
-    // --- 保存と読み込み (PlayerPrefsを使用) ---
+    // --- 保存/復元 ---
+    // 進行度の永続化は AutoSaveManager に一元化した。
+    // SaveData() は既存の呼び出し互換のため残すが、個別のPlayerPrefs書き込みは行わない
+    // （AutoSaveManager が定期的に現在値をまとめて保存する）。
     public void SaveData()
     {
-        PlayerPrefs.SetInt("PlayerLevel", Level);
-        PlayerPrefs.SetInt("PlayerExp", CurrentExp);
-        PlayerPrefs.SetInt("NextExp", ExpToNextLevel);
-        PlayerPrefs.SetInt("SkillPoints", SkillPoints);
-        PlayerPrefs.Save();
+        // no-op: 永続化は AutoSaveManager 側で実施
     }
 
-    private void LoadData()
+    /// <summary>現在の進行度を取得する（AutoSaveManagerの保存用）。</summary>
+    public void GetProgress(out int level, out int exp, out int expToNext, out int skillPoints)
     {
-        Level = PlayerPrefs.GetInt("PlayerLevel", 1);
-        CurrentExp = PlayerPrefs.GetInt("PlayerExp", 0);
-        ExpToNextLevel = PlayerPrefs.GetInt("NextExp", 100);
-        SkillPoints = PlayerPrefs.GetInt("SkillPoints", 0);
+        level = Level;
+        exp = CurrentExp;
+        expToNext = ExpToNextLevel;
+        skillPoints = SkillPoints;
+    }
+
+    /// <summary>セーブデータから進行度を復元する（AutoSaveManager用）。</summary>
+    public void RestoreProgress(int level, int exp, int expToNext, int skillPoints)
+    {
+        Level = Mathf.Max(1, level);
+        CurrentExp = Mathf.Max(0, exp);
+        ExpToNextLevel = Mathf.Max(1, expToNext);
+        SkillPoints = Mathf.Max(0, skillPoints);
     }
 
     public void AddSkillPoints(int amount =1)

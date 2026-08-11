@@ -9,6 +9,11 @@ namespace UI.MultiMedia
     /// <summary>
     /// 1つの選択項目に対応する複数のページデータを保持するコンポーネント。
     /// Selectableを継承し、EventSystemによるナビゲーションとローカルでのページ送り操作を処理する。
+    ///
+    /// CarouselMenuController との違い:
+    ///   ・こちらは MultiMediaGenerator 専用（単独のギャラリーシーン用）
+    ///   ・項目自体がページデータを持ち、選択しただけで左右ページ送りが可能
+    ///   ・上下移動は base.OnMove に任せて隣の項目へ、左右はページ送りに使う
     /// </summary>
     public class MultiMediaContent : Selectable, ISelectHandler, IDeselectHandler, ISubmitHandler
     {
@@ -54,6 +59,9 @@ namespace UI.MultiMedia
             }
         }
 
+        /// <summary>
+        /// EventSystem からの移動入力。上下=項目移動、左右=ページ送り。
+        /// </summary>
         public override void OnMove(AxisEventData eventData)
         {
             // 上下の移動は通常通り（別の項目へ）
@@ -79,6 +87,10 @@ namespace UI.MultiMedia
             }
         }
 
+        /// <summary>
+        /// ページ番号を direction(±1) だけ進め、端まで来たらループさせます。
+        /// 変更後は Presenter への表示反映とインジケータ更新の通知を行います。
+        /// </summary>
         private void ChangePage(int direction)
         {
             if (pages == null || pages.Count == 0) return;
@@ -101,6 +113,8 @@ namespace UI.MultiMedia
             OnIndicatorUpdate?.Invoke(pages?.Count ?? 0, _currentPageIndex);
         }
 
+        // インジケータ更新の通知先（MultiMediaGenerator.UpdateIndicator が登録される）
+        // 引数: (ページ総数, 現在のページindex)
         public System.Action<int, int> OnIndicatorUpdate;
 
         public override void OnSelect(BaseEventData eventData)
@@ -131,6 +145,9 @@ namespace UI.MultiMedia
             }
         }
 
+        /// <summary>
+        /// 現在のページ内容を Presenter に表示させます。ページがなければ全消去。
+        /// </summary>
         private void UpdatePresenter()
         {
             if (_presenter != null && pages != null && pages.Count > 0)

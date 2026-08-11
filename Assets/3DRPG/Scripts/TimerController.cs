@@ -8,6 +8,16 @@ public class TimerController : MonoBehaviour
     private float timer = 0.0f;
     private bool isRunning = true;
 
+    /// <summary>現在の経過時間（オートセーブ用）</summary>
+    public float CurrentTime => timer;
+
+    /// <summary>経過時間を外部から設定する（セーブデータからの復元用）</summary>
+    public void SetTime(float time)
+    {
+        timer = Mathf.Max(0f, time);
+        DisplayTime(timer);
+    }
+
     [SerializeField] private TextMeshProUGUI timerText;
 
     public static float finalTime;
