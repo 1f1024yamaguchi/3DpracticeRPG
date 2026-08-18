@@ -22358,7 +22358,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -105}
+  m_AnchoredPosition: {x: 215, y: 5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &473787655
@@ -31302,19 +31302,14 @@ MonoBehaviour:
   playerPrefsKey: 
   isPermitted: 1
   mediaPages:
-  - description: "\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042"
+  - description: "\u306E\u3069\u304B\u306A\u65E5\u5E38\u306F\u7A7A\u306B\u3067\u304D\u305F\u88C2\u3051\u76EE\u306B\u3088\u3063\u3066\u7A81\u7136\u58CA\u3055\u308C\u305F\u3002\r\n\u7A7A\u306E\u8272\u306F\u5909\u308F\u308A\u3001\u4EBA\u3005\u306F\u30E2\u30F3\u30B9\u30BF\u30FC\u306B\u8972\u308F\u308C\u4E16\u754C\u306F\u5D29\u58CA\u3057\u3064\u3064\u3042\u308B\u3002"
     mediaType: 1
-    imageSprite: {fileID: 21300000, guid: dcd8491f65d252e43a17fd05558e045e, type: 3}
+    imageSprite: {fileID: 21300000, guid: 825179e92d892a94eb882bce29adeb6e, type: 3}
     videoClip: {fileID: 0}
     videoUrl: 
-  - description: "\u3044\u3044\u3044\u3044\u3044\u3044\u3044\u3044\u3044\u3044"
+  - description: "\u88C2\u3051\u76EE\u3092\u4F5C\u3063\u305F\u30DC\u30B9\u3092\u5012\u3057\u3066\u5E73\u548C\u306A\u4E16\u754C\u3092\u53D6\u308A\u623B\u305B\uFF01\r\n"
     mediaType: 1
-    imageSprite: {fileID: 21300000, guid: cf68f8fe25b24344ca1c8758a8f749c8, type: 3}
-    videoClip: {fileID: 0}
-    videoUrl: 
-  - description: "\u3046\u3046\u3046\u3046\u3046\u3046\u3046\u3046"
-    mediaType: 1
-    imageSprite: {fileID: 21300000, guid: 1396cac713a952d48aeb348e44678a14, type: 3}
+    imageSprite: {fileID: 21300000, guid: 825179e92d892a94eb882bce29adeb6e, type: 3}
     videoClip: {fileID: 0}
     videoUrl: 
   inputCooldown: 0.2
@@ -31993,7 +31988,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 357, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &681555094
@@ -42163,8 +42158,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 63, y: 143}
-  m_SizeDelta: {x: 200, y: 150}
+  m_AnchoredPosition: {x: 155.34, y: 174.18}
+  m_SizeDelta: {x: 384.67, y: 212.35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1031331070
 PrefabInstance:
@@ -60414,9 +60409,9 @@ RectTransform:
   - {fileID: 740748028}
   m_Father: {fileID: 2037696932}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 50, y: -25}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1509091062
@@ -66883,8 +66878,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -66951,8 +66946,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 121, y: 25}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 219, y: -161}
+  m_SizeDelta: {x: 397.67, y: 148.17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1735908942
 PrefabInstance:
@@ -72163,9 +72158,9 @@ RectTransform:
   - {fileID: 2101704014}
   m_Father: {fileID: 2037696932}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 50, y: -105}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1879671120
@@ -73575,7 +73570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1923215286
 RectTransform:
   m_ObjectHideFlags: 0
@@ -82597,7 +82592,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2092283193
 RectTransform:
   m_ObjectHideFlags: 0
@@ -82677,6 +82672,8 @@ MonoBehaviour:
   inactiveSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   activeColor: {r: 1, g: 0.27735847, b: 0.27735847, a: 1}
   inactiveColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  indicatorSize: {x: 20, y: 20}
+  indicatorSpacing: -1
 --- !u!223 &2092283196
 Canvas:
   m_ObjectHideFlags: 0

@@ -22,8 +22,10 @@ MonoBehaviour:
   m_Scenes:
   - m_enabled: 0
     m_path: Assets/3DRPG/Scenes/Start.unity
-  - m_enabled: 1
+  - m_enabled: 0
     m_path: Assets/3DRPG/Scenes/Start_SampleScene.unity
+  - m_enabled: 1
+    m_path: Assets/3DRPG/Scenes/Start_SampleScene_horizon_plustest.unity
   - m_enabled: 1
     m_path: Assets/3DRPG/Scenes/Main.unity
   - m_enabled: 1

@@ -5,13 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/3DRPG/Scenes/Start.unity
     guid: cfecb4b5f6e6f83498c4f9213313ece4
   - enabled: 1
+    path: Assets/3DRPG/Scenes/Start_SampleScene_horizon_plustest.unity
+    guid: e712a75f983ce0d4fb997745db1a9708
+  - enabled: 1
     path: Assets/3DRPG/Scenes/Main.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/3DRPG/Scenes/GameOverScene.unity
     guid: 400e9b903fd28d6449a42c678dac01a4
   - enabled: 1

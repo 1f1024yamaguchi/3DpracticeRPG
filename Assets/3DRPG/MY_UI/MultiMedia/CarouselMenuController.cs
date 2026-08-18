@@ -30,6 +30,12 @@ namespace UI.MultiMedia
         [SerializeField] private Color activeColor = Color.white;
         [SerializeField] private Color inactiveColor = Color.gray;
 
+        [Header("Page Indicator Size (自在に調整可能)")]
+        [Tooltip("各ページインジケータ(●)のサイズ(px)。ここを変えれば現在ページ表示の大きさを自在に変えられます。")]
+        [SerializeField] private Vector2 indicatorSize = new Vector2(24f, 24f);
+        [Tooltip("インジケータ同士の間隔(px)。0以上ならHorizontalLayoutGroupのspacingをこの値で上書き。負値なら既存設定のまま。")]
+        [SerializeField] private float indicatorSpacing = -1f;
+
         private List<MediaPageData> _currentPages;  // 現在閲覧中のページデータ一覧
         private string _currentItemName;            // 現在の項目名（タイトル表示用）
         private int _currentPageIndex = 0;          // 現在表示中のページ番号
@@ -146,10 +152,17 @@ namespace UI.MultiMedia
         /// ページ数分のインジケータ（●）を HorizontalLayoutGroup の子として生成します。
         /// 既存のものは一度破棄してから作り直します。
         /// </summary>
-        private void GeneratePageIndicators(int pageCount)
+private void GeneratePageIndicators(int pageCount)
         {
             // 必要な参照が揃っていなければ何もしない（インジケータなしでも動作可能）
             if (horizontalLayoutGroupObj == null || activeSprite == null || inactiveSprite == null) return;
+
+            // 間隔をコード側から上書き（indicatorSpacing が 0 以上のときのみ）
+            if (indicatorSpacing >= 0f)
+            {
+                var hlg = horizontalLayoutGroupObj.GetComponent<HorizontalLayoutGroup>();
+                if (hlg != null) hlg.spacing = indicatorSpacing;
+            }
 
             // 既存のインジケータをクリア
             foreach (var indicator in _generatedPageIndicators)
@@ -161,15 +174,17 @@ namespace UI.MultiMedia
             }
             _generatedPageIndicators.Clear();
 
-            // 新しいインジケータを生成（Image を持つ空オブジェクトを並べるだけ）
+            // 新しいインジケータを生成（サイズは indicatorSize で指定）
             for (int i = 0; i < pageCount; i++)
             {
-                GameObject indicator = new GameObject($"PageIndicator_{i}");
+                GameObject indicator = new GameObject($"PageIndicator_{i}", typeof(RectTransform));
                 indicator.transform.SetParent(horizontalLayoutGroupObj.transform, false);
 
                 Image img = indicator.AddComponent<Image>();
                 img.sprite = inactiveSprite;
                 img.color = inactiveColor;
+
+                ApplyIndicatorSize(indicator);
 
                 _generatedPageIndicators.Add(indicator);
             }
@@ -195,6 +210,40 @@ namespace UI.MultiMedia
                 }
             }
         }
+
+/// <summary>
+        /// 実行中でもインジケータのサイズを変更したい場合に呼びます。
+        /// indicatorSize を更新し、生成済みインジケータへ即座に反映します。
+        /// </summary>
+        public void SetIndicatorSize(Vector2 size)
+        {
+            indicatorSize = size;
+            foreach (var indicator in _generatedPageIndicators)
+            {
+                if (indicator != null) ApplyIndicatorSize(indicator);
+            }
+        }
+
+        /// <summary>
+        /// 1つのインジケータへ現在の indicatorSize を適用します。
+        /// RectTransform と LayoutElement の両方へ設定するため、
+        /// HorizontalLayoutGroup の ChildControlSize 設定に関わらずサイズが反映されます。
+        /// </summary>
+        private void ApplyIndicatorSize(GameObject indicator)
+        {
+            if (indicator == null) return;
+
+            var rt = indicator.GetComponent<RectTransform>();
+            if (rt != null) rt.sizeDelta = indicatorSize;
+
+            var le = indicator.GetComponent<LayoutElement>();
+            if (le == null) le = indicator.AddComponent<LayoutElement>();
+            le.preferredWidth = indicatorSize.x;
+            le.preferredHeight = indicatorSize.y;
+            le.minWidth = indicatorSize.x;
+            le.minHeight = indicatorSize.y;
+        }
+
 
         /// <summary>
         /// ページ送り時の効果音（SEManager 連携は現在コメントアウト中）。
